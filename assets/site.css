@@ -350,6 +350,26 @@ section {
   padding: 0 24px 40px;
 }
 
+/* ---- side-rail ads: desktop only, enough spare width beside the 1080px
+   content column that they never overlap it ---- */
+.side-ad {
+  display: none;
+}
+
+@media (min-width: 1500px) {
+  .side-ad {
+    display: block;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 160px;
+    min-height: 600px;
+    z-index: 5;
+  }
+  .side-ad-left { left: 24px; }
+  .side-ad-right { right: 24px; }
+}
+
 footer {
   border-top: 1px solid var(--border);
   padding: 28px 0 40px;
