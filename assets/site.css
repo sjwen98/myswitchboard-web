@@ -344,6 +344,12 @@ section {
 .final-cta h2 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); margin: 0 0 14px; font-weight: 800; }
 .final-cta p { color: var(--text-dim); margin: 0 0 30px; }
 
+.ad-slot {
+  position: relative;
+  z-index: 1;
+  padding: 0 24px 40px;
+}
+
 footer {
   border-top: 1px solid var(--border);
   padding: 28px 0 40px;
