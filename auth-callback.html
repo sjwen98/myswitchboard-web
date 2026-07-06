@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>mySwitchBoard — 验证完成</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_32.png">
+<link rel="apple-touch-icon" href="assets/app_icon_180.png">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="index.html">
+        <img src="assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap legal-page">
+  <h1>验证已完成</h1>
+  <p>
+    如果您的手机上安装了 mySwitchBoard，本页面通常不会显示——系统会直接把您带回 App。
+    看到这段文字，说明这台设备没有安装 App，或者系统还没有把这个链接和 App 关联起来。
+  </p>
+  <p>
+    <a id="open-app" href="myswitchboard://login-callback">在已安装的手机上，点此打开 App</a>
+  </p>
+  <p style="color: var(--text-dim); font-size: 0.9rem;">
+    没有安装？前往 <a href="index.html">mySwitchBoard 首页</a> 了解更多。
+  </p>
+</main>
+
+<script>
+  // Supabase appends the actual auth token/code as a query string or hash
+  // fragment on this URL -- forward it as-is onto the custom-scheme link
+  // so the app still receives it (a link missing these params opens the
+  // app but auth never completes). Also try it automatically once: most
+  // mobile browsers still honor a script-triggered custom-scheme
+  // navigation on initial page load, so a device with the app installed
+  // may never actually see this page render.
+  var suffix = window.location.search + window.location.hash;
+  var appLink = document.getElementById('open-app');
+  appLink.href = appLink.href + suffix;
+  window.location.href = appLink.href;
+</script>
+
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
