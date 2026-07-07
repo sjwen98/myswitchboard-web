@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>mySwitchBoard — Verifying</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style>
+  /* Rendered inside an in-app WebView modal, not browsed directly -- keep
+     it minimal and transparent so it blends into the app's own modal
+     surface. Turnstile brings its own widget chrome. */
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .caption {
+    color: #9aa4b2;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- Widget mode (managed / non-interactive / invisible) is configured on
+       the sitekey itself in the Cloudflare dashboard (this one is Managed),
+       not here. The sitekey is public and bound to myswitchboard.vercel.app;
+       the matching Secret Key lives only in the Supabase dashboard, never
+       in this page. -->
+  <div class="cf-turnstile"
+       data-sitekey="0x4AAAAAADxagPpunllwPuom"
+       data-callback="onToken"
+       data-error-callback="onError"
+       data-expired-callback="onError"></div>
+  <div class="caption" id="caption">Verifying…</div>
+</div>
+
+<script>
+  // Relay results back to the Flutter host via flutter_inappwebview's
+  // callHandler bridge (same mechanism the app's other injected JS uses).
+  // Guarded because the bridge object may not exist if this page is ever
+  // opened in a plain browser rather than inside the app's WebView.
+  function relay(handler, arg) {
+    try {
+      if (window.flutter_inappwebview) {
+        window.flutter_inappwebview.callHandler(handler, arg);
+      }
+    } catch (e) {}
+  }
+  function onToken(token) { relay('turnstileToken', token); }
+  function onError() { relay('turnstileError', 'error'); }
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</body>
+</html>
