@@ -40,13 +40,18 @@
        the matching Secret Key lives only in the Supabase dashboard, never
        in this page. -->
   <!-- data-size="flexible": the widget fills its container width instead of
-       a fixed 300px, so it can't get clipped by a narrower WebView. -->
+       a fixed 300px, so it can't get clipped by a narrower WebView.
+       data-before-interactive-callback: fired right before Turnstile
+       escalates to an interactive challenge -- the app keeps this WebView
+       hidden behind a "verifying" curtain until this fires, then reveals it
+       so the user can solve the challenge. -->
   <div class="cf-turnstile"
        data-sitekey="0x4AAAAAADxagPpunllwPuom"
        data-size="flexible"
        data-callback="onToken"
        data-error-callback="onError"
-       data-expired-callback="onError"></div>
+       data-expired-callback="onError"
+       data-before-interactive-callback="onInteractive"></div>
 </div>
 
 <script>
@@ -63,6 +68,7 @@
   }
   function onToken(token) { relay('turnstileToken', token); }
   function onError() { relay('turnstileError', 'error'); }
+  function onInteractive() { relay('turnstileInteractive', ''); }
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
