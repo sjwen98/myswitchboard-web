@@ -39,12 +39,14 @@
        not here. The sitekey is public and bound to myswitchboard.vercel.app;
        the matching Secret Key lives only in the Supabase dashboard, never
        in this page. -->
+  <!-- data-size="flexible": the widget fills its container width instead of
+       a fixed 300px, so it can't get clipped by a narrower WebView. -->
   <div class="cf-turnstile"
        data-sitekey="0x4AAAAAADxagPpunllwPuom"
+       data-size="flexible"
        data-callback="onToken"
        data-error-callback="onError"
        data-expired-callback="onError"></div>
-  <div class="caption" id="caption">Verifying…</div>
 </div>
 
 <script>
