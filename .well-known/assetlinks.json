@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "com.switchboard.my_switch_board",
       "sha256_cert_fingerprints": [
-        "DE:02:82:BB:94:AF:33:8F:F0:31:B9:1C:F4:D7:BA:46:B8:52:CC:CE:92:5A:E6:39:E1:97:EE:66:BF:4E:D8:85"
+        "DE:02:82:BB:94:AF:33:8F:F0:31:B9:1C:F4:D7:BA:46:B8:52:CC:CE:92:5A:E6:39:E1:97:EE:66:BF:4E:D8:85",
+        "51:43:59:FB:64:FC:74:A5:6E:08:D9:D8:00:EC:21:2A:67:C5:96:8B:FB:59:F3:E7:7E:67:A5:3B:67:C4:4F:F5"
       ]
     }
   }
