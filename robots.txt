@@ -1,0 +1,9 @@
+# mySwitchBoard — https://myswitchboard.vercel.app
+User-agent: *
+Allow: /
+
+# In-app WebView endpoints, not real landing pages (both also send noindex).
+Disallow: /auth-callback.html
+Disallow: /captcha.html
+
+Sitemap: https://myswitchboard.vercel.app/sitemap.xml
