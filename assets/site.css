@@ -399,7 +399,7 @@ footer {
   color: var(--text-dimmer);
 }
 
-.footer-links { display: flex; gap: 20px; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
 .footer-links a { color: var(--text-dim); }
 
 /* ---- legal pages (privacy / terms) ---- */
