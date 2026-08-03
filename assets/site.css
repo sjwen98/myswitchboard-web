@@ -179,7 +179,7 @@ h1 span { color: var(--accent); }
 .store-btn--live svg { opacity: 1; }
 .store-btn--live .small { color: var(--text-dim); }
 .store-btn--live .big { color: var(--text); }
-.store-btn--live:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-1px); }
+.store-btn--live:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-1px); text-decoration: none; }
 
 /* ---- section shell ---- */
 section {
