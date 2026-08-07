@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Frequently asked questions — mySwitchBoard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How mySwitchBoard stores credentials, what happens if you lose your phone, which sites automated login works on, and how to delete your data. Straight answers, including the limits.">
+<meta name="keywords" content="mySwitchBoard FAQ, does the app store my passwords, automated login limits, delete account data, Supabase Vault encryption">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/faq.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/faq.html">
+<meta property="og:title" content="Frequently asked questions">
+<meta property="og:description" content="How mySwitchBoard stores credentials, what happens if you lose your phone, which sites automated login works on, and how to delete your data. Straight answers, including the limits.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_32.png">
+<link rel="apple-touch-icon" href="assets/app_icon_180.png">
+<link rel="stylesheet" href="assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="index.html">
+        <img src="assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="guides/index.html">Guides</a>
+        <a href="faq.html">FAQ</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="index.html">Home</a> &rsaquo; FAQ</div>
+
+  <h1>Frequently asked questions</h1>
+  <p class="meta">Support &middot; Last reviewed August 2026</p>
+
+  <p class="lede">Answers about how the app handles your credentials, what it can and can't automate, and how to get your data out. Where there's a limitation, it's stated rather than buried — this app types your passwords into login forms, so you're entitled to know exactly how that works before you trust it with anything.</p>
+
+  <nav class="faq-nav" aria-label="Sections">
+    <a href="#security">Security &amp; privacy</a>
+    <a href="#how">How it works</a>
+    <a href="#compatibility">Site compatibility</a>
+    <a href="#account">Account &amp; data</a>
+  </nav>
+
+  <h2 id="security">Security &amp; privacy</h2>
+
+  <h3>Where are the passwords for my sites stored?</h3>
+
+  <p>Server-side, encrypted at rest in <a href="https://supabase.com/docs/guides/database/vault" target="_blank" rel="noopener">Supabase Vault</a>. They are not persisted into the app's local state on your device.</p>
+
+  <p>That design has a specific consequence worth understanding: a stolen or unlocked phone does not hand someone a copy of your site passwords, because the phone isn't where they live. It also means the app needs a network connection to perform a login.</p>
+
+  <h3>Can you see my passwords?</h3>
+
+  <p>The honest answer needs two parts.</p>
+
+  <p>In normal operation, no. Your credentials sit encrypted, and are decrypted server-side — momentarily, by a restricted edge function — only at the point a login <em>you initiated</em> needs them. They are never read, shared, or sold. That commitment is in the <a href="privacy.html">Privacy Policy</a>.</p>
+
+  <p>But to be precise about what that does and doesn't mean: <strong>this is not zero-knowledge encryption.</strong> Any system that can type your password into a third-party login form must be able to recover that password, so the ability to decrypt necessarily exists on the server. What protects you is that this ability is scoped to performing logins you asked for, not that it's mathematically impossible to exercise.</p>
+
+  <p>If your requirement is that literally nobody but you can ever decrypt a credential, that property is fundamentally incompatible with automated form filling, and a zero-knowledge password manager is the right tool for those particular accounts. Our guide on <a href="guides/choosing-where-credentials-live.html">choosing where credentials live</a> covers the trade-off in general terms, without reference to this app.</p>
+
+  <h3>Should I use this for my most sensitive accounts?</h3>
+
+  <p>We'd suggest not, and it's worth explaining why rather than just claiming everything is safe.</p>
+
+  <p>mySwitchBoard is built for the dashboards you open repeatedly — analytics, reporting, helpdesks, client consoles. The accounts that control everything else (your domain registrar, DNS, primary email, cloud root) are a different category. Those are worth protecting with a hardware key and a bit of deliberate friction, and they're not the accounts where batch login saves you much time anyway, since you sign into them rarely.</p>
+
+  <p>Our guide on <a href="guides/managing-many-admin-dashboards.html">ranking accounts by blast radius</a> explains how to draw that line for your own setup.</p>
+
+  <h3>What happens if I lose my phone?</h3>
+
+  <p>Your site credentials aren't stored on the device, so they don't leave with it. The app also supports a Face ID or fingerprint lock as an extra gate in front of your account, so a signed-in phone isn't the same thing as an unlocked one.</p>
+
+  <p>That said, treat it as you would any account on a lost device: change your mySwitchBoard sign-in password from another device, and if you signed in with Google, Facebook, or X, review the active sessions on that provider too. Our guide on <a href="guides/session-lifetimes-and-cookies.html">sessions and device trust</a> covers what "sign out everywhere" does and doesn't cover.</p>
+
+  <h3>What data do you collect about me?</h3>
+
+  <p>Your sign-in identity (email and basic profile from whichever provider you use), the sites and credentials you choose to add, and — because the app is ad-supported — device identifiers and usage data collected by Google AdMob to serve and measure ads. The <a href="privacy.html">Privacy Policy</a> is the authoritative version and is short enough to read in full.</p>
+
+  <h3>Does the app show ads?</h3>
+
+  <p>Yes. mySwitchBoard is free and supported by ads served through Google AdMob.</p>
+
+  <h2 id="how">How it works</h2>
+
+  <h3>Do I need to write CSS selectors?</h3>
+
+  <p>No. That's the part the app is specifically designed to remove.</p>
+
+  <p>You open the site's login page inside the app and tap the actual username field, the actual password field, and the actual submit button. The app works out how to find them again. No developer tools, no inspecting page source, no hand-written selectors.</p>
+
+  <h3>What happens when a site changes its login page?</h3>
+
+  <p>The saved selection can stop matching, and the login will fail to fill correctly. Login pages change without notice and we can't guarantee otherwise — this is stated plainly in the <a href="terms.html">Terms</a>.</p>
+
+  <p>The fix is the same short process as the initial setup: open that site's configuration and re-tap the fields on the new page. It takes about as long as logging in manually once.</p>
+
+  <h3>What are Flows?</h3>
+
+  <p>A Premium feature for the steps that come <em>after</em> login. You record a sequence of clicks and inputs once — the report you pull every week, the filter you always set, the date range you always change — and replay it in one tap.</p>
+
+  <h3>How do I sign in to mySwitchBoard itself?</h3>
+
+  <p>Email and password, or Google, Facebook, or X — whichever account you already trust. This is separate from the credentials you store for your own sites.</p>
+
+  <h3>Is this a replacement for my password manager?</h3>
+
+  <p>No, and it isn't trying to be. A password manager is where credentials live for your whole digital life, including the accounts you should never automate. mySwitchBoard does one narrower job: opening a group of dashboards and signing into each one, in sequence, without you retyping anything.</p>
+
+  <p>Plenty of people sensibly use both — the manager as the system of record, this for the daily batch.</p>
+
+  <h2 id="compatibility">Site compatibility</h2>
+
+  <h3>Will automated login work on every site?</h3>
+
+  <p>No, and it's better to know that upfront than to discover it after installing.</p>
+
+  <p>Many sites deploy anti-bot and anti-automation protections that are specifically designed to block automated interaction, regardless of whether it's you doing the asking. When a site refuses automated interaction, that's the site's protection working as intended — not a fault in the app. The <a href="terms.html">Terms</a> cover this explicitly.</p>
+
+  <p>In practice, ordinary username-and-password dashboards work well. The more security machinery a site puts in front of its login form, the more likely it is to push back.</p>
+
+  <h3>Why does it use real browser tabs instead of just sending requests?</h3>
+
+  <p>Because a real browser tab is what most login pages actually expect. Sites depend on their own JavaScript running, on scripts setting cookies, and on the page behaving like a page — a synthetic request often gets rejected by machinery that has nothing to do with your credentials being correct.</p>
+
+  <p>Using a genuine WebView tab means you're logging in the same way you would by hand, just without the typing. It's also why each site opens as its own visible tab rather than happening invisibly: you can see exactly what the app did.</p>
+
+  <h2 id="account">Account &amp; data</h2>
+
+  <h3>Which platforms is it available on?</h3>
+
+  <p>Android, <a href="https://play.google.com/store/apps/details?id=com.switchboard.my_switch_board" target="_blank" rel="noopener">on Google Play</a> now. iOS is in progress and not yet released — the App Store button on this site is deliberately inactive rather than pointing somewhere that doesn't exist yet.</p>
+
+  <h3>How do I delete a single site without deleting my account?</h3>
+
+  <p>On the home screen, swipe the saved site and tap delete. That removes the site and the encrypted credential stored for it, and leaves your account and everything else intact.</p>
+
+  <h3>How do I delete my account and everything in it?</h3>
+
+  <p>In the app: Settings (the gear icon) &rarr; your profile &rarr; Danger zone &rarr; Delete account. You'll type your email to confirm. Deletion is immediate and cannot be undone.</p>
+
+  <p>If you can't sign in any more, email us from the address on the account and we'll do it for you. Full instructions, including exactly what gets removed, are on the <a href="data-deletion.html">Data Deletion</a> page.</p>
+
+  <h3>How do I get in touch?</h3>
+
+  <p>Email us: <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com" data-show-address="true">contact us</a>. Questions about a specific site not working are useful — tell us which site and what happened, and it helps us understand where compatibility breaks down.</p>
+
+  <div class="article-foot">
+    <h2>Related reading</h2>
+    <ul>
+      <li><a href="guides/index.html">All guides</a> — vendor-neutral writing on managing many accounts</li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms of Service</a></li>
+      <li><a href="data-deletion.html">Data Deletion</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="guides/index.html">Guides</a>
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/contact.js" defer></script>
+</body>
+</html>

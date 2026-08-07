@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>When a dashboard has no user management — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Some vendors sell exactly one login and no roles. How to work safely inside that constraint: compensating controls, documenting the exception, and getting the vendor to fix it.">
+<meta name="keywords" content="no user management, single seat vendor, shared login workarounds, compensating controls, vendor access request">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/when-a-dashboard-has-no-user-management.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/when-a-dashboard-has-no-user-management.html">
+<meta property="og:title" content="When a dashboard has no user management">
+<meta property="og:description" content="Some vendors sell exactly one login and no roles. How to work safely inside that constraint: compensating controls, documenting the exception, and getting the vendor to fix it.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; No user management</div>
+
+  <h1>When a dashboard has no user management</h1>
+  <p class="meta">Practical guides &middot; About 6 minutes</p>
+
+  <p class="lede">Every guide about access control assumes the vendor gives you users and roles. Plenty don't. The regional payment gateway, the industry-specific portal, the small tool that does one thing well, the government filing site — one login, no roles, no audit log, and a support team who don't understand the question. This is about working sensibly inside that constraint instead of pretending it isn't there.</p>
+
+  <h2>First, confirm it's actually true</h2>
+
+  <p>Before designing around the limitation, spend ten minutes verifying it exists. It's wrong more often than you'd think:</p>
+
+  <ul>
+    <li><strong>The feature may be on a higher plan.</strong> Annoying, but a plan upgrade is usually cheaper than the ongoing cost of a shared credential, and much cheaper than one incident.</li>
+    <li><strong>It may be hidden.</strong> User management turns up under "Team", "Organisation", "Company profile", "Sub-accounts", "Delegated access", or buried in billing settings. It isn't always where you'd look.</li>
+    <li><strong>It may have shipped since you checked.</strong> Products grow. If your judgement is more than a year old, re-check.</li>
+    <li><strong>There may be a different access model entirely.</strong> Advertising, analytics, and merchant platforms often use partner or agency linking rather than user seats — a completely separate menu, and exactly what you want if you manage accounts on someone's behalf.</li>
+    <li><strong>Ask support directly.</strong> "How do I give a colleague access without sharing my password?" Their answer is worth having on record either way.</li>
+  </ul>
+
+  <p>If you land on a genuine no, you now have a documented exception rather than an assumption. That distinction matters for everything that follows.</p>
+
+  <h2>Reduce how many people need it</h2>
+
+  <p>The cheapest control is fewer holders. Before improving how you share a credential, question whether it needs sharing at all.</p>
+
+  <p>Often the reason several people have access is that each needs one small thing — a monthly figure, an invoice, a status check. If one person can produce that output on a schedule, or the data can be exported to a place others already have access to, the number of people needing the login drops to one or two.</p>
+
+  <p>This isn't gatekeeping for its own sake. With no audit log, every additional holder is a permanent, unattributable increase in risk that you cannot undo except by rotating. Reducing the count is the only lever that works cleanly.</p>
+
+  <h2>Compensating controls</h2>
+
+  <p>You can't get attribution or roles, but you can make the credential harder to misuse and easier to clean up.</p>
+
+  <h3>Store it as a deliberate exception</h3>
+
+  <p>A dedicated shared collection in your password manager — not someone's personal vault — with the smallest possible group, and a note in the entry saying <em>why</em> it's shared and when you last checked for alternatives. That note is what stops a temporary workaround becoming permanent by default. Re-check at renewal, when you have leverage.</p>
+
+  <h3>Put the second factor with the credential</h3>
+
+  <p>If the service supports 2FA, enable it and store the TOTP seed in the same shared vault entry. The factor stops being "something only you have" — but it still defeats a stolen-password attack, which is the realistic threat. What you must avoid is routing the factor through one person's phone, which produces codes relayed over chat and, eventually, someone disabling 2FA to get work done. The <a href="two-factor-authentication-many-accounts.html">2FA guide</a> covers this pattern in more detail.</p>
+
+  <h3>Use a role address, not a person's</h3>
+
+  <p>Register the account to <code>billing@</code> or <code>ops@</code> rather than an individual's address. Then password resets, security alerts, and vendor notices land somewhere the team controls, and the account doesn't quietly become unrecoverable when that person leaves. Retrofitting this is usually a simple email change in settings, and it's the highest-value fix on this list.</p>
+
+  <h3>Get attribution outside the system</h3>
+
+  <p>Since the platform won't tell you who did what, capture it yourself where the actions matter — a shared log of significant changes, or a rule that anything irreversible gets announced in a team channel first. Lightweight and imperfect, but it turns "nobody knows" into "we can reconstruct it", and it's the only form of attribution available to you.</p>
+
+  <h3>Constrain what the account can reach</h3>
+
+  <p>Where the vendor offers IP allowlisting, use it. Where the sensitive actions are the ones that move money or change payout details, check whether those specific operations can be locked behind a separate confirmation the vendor does support — some products with no user management still have a distinct "authorised contact" for financial changes.</p>
+
+  <h3>Rotate on every departure, without exception</h3>
+
+  <p>This is the one that gets skipped, and it's the only real revocation you have. When someone with access leaves, the credential changes. Your vault should be able to tell you which entries that covers — which is the entire reason for keeping them in a dedicated collection.</p>
+
+  <div class="callout">
+    <div class="callout-title">The honest framing</div>
+    <p>None of these make a shared login as good as individual accounts. They make it a managed risk with a documented reason and a working cleanup path, rather than an accident nobody has looked at. That's the achievable goal here.</p>
+  </div>
+
+  <h2>Pressure the vendor, properly</h2>
+
+  <p>Vendors add user management when customers ask in a way that reaches the roadmap. A support ticket that says "please add roles" goes nowhere. One that says "we have four people needing access; the absence of user accounts is a compliance blocker for us at renewal" gets escalated, because it's attached to revenue.</p>
+
+  <p>Ask at renewal rather than mid-contract. Ask in writing. Ask for a timeline, and if there is one, note it in your inventory with a date to re-check. If enough of a vendor's customers do this, the feature ships — and even when it doesn't, you now have a documented reason to consider alternatives.</p>
+
+  <h2>Know when to walk</h2>
+
+  <p>Sometimes the right answer is to replace the tool. It's a real cost, so weigh it honestly. Reasons that justify migrating:</p>
+
+  <ul>
+    <li>The account controls money movement, and you cannot attribute actions to a person.</li>
+    <li>It holds customer personal data and you have obligations about who accessed it.</li>
+    <li>Your team is growing, so the number of people needing the shared login keeps rising.</li>
+    <li>A competent alternative exists at comparable cost with proper access control.</li>
+    <li>You've asked twice, across two renewals, and there's no roadmap.</li>
+  </ul>
+
+  <p>Reasons that don't, on their own: it's mildly annoying; a competitor's marketing page looks better; you'd prefer nicer UX. Migration has real costs — data export, retraining, integration rework, the period where both systems run. Make the decision on risk, not aesthetics.</p>
+
+  <h2>Track them as a set</h2>
+
+  <p>Add a column to your <a href="managing-many-admin-dashboards.html">inventory</a> marking which services lack user management. That column turns a scattered irritation into a list you can act on: it tells you exactly which credentials to rotate at every departure, which vendors to push at renewal, and — when someone asks how exposed you are — gives you an answer instead of a shrug.</p>
+
+  <p>It also shrinks over time, which is quietly satisfying. Vendors ship the feature, you migrate off the worst offenders, and the list of exceptions gets shorter. That only happens if the list exists.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="sharing-dashboard-access-with-a-team.html">Sharing dashboard access with a team without sharing passwords</a></li>
+      <li><a href="two-factor-authentication-many-accounts.html">Organising two-factor authentication across dozens of accounts</a></li>
+      <li><a href="quarterly-access-review.html">A quarterly access review you can finish in an hour</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

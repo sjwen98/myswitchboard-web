@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A quarterly access review you can finish in an hour — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A time-boxed, repeatable review of who has access to what: the six checks worth running, what to skip, and how to make the next one faster than the last.">
+<meta name="keywords" content="access review checklist, user access audit, permission review, revoke stale access, quarterly security review">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/quarterly-access-review.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/quarterly-access-review.html">
+<meta property="og:title" content="A quarterly access review you can finish in an hour">
+<meta property="og:description" content="A time-boxed, repeatable review of who has access to what: the six checks worth running, what to skip, and how to make the next one faster than the last.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Access review</div>
+
+  <h1>A quarterly access review you can finish in an hour</h1>
+  <p class="meta">Practical guides &middot; About 6 minutes</p>
+
+  <p class="lede">Access only ever accumulates. People get added and rarely removed, temporary permissions become permanent, and integrations you approved in 2023 still hold a token. Nothing forces a cleanup, so it doesn't happen — until an incident forces it at the worst possible moment. The fix is a small, boring, time-boxed review you can actually sustain.</p>
+
+  <h2>Make it finishable</h2>
+
+  <p>The reason access reviews don't happen is that people design them to be thorough, discover they take a full day, and never schedule the second one. A review you do four times a year at 80% coverage beats a perfect one you do once and abandon.</p>
+
+  <p>So: put an hour in the calendar, quarterly, and treat the hour as fixed. If you run out of time, note where you stopped and start there next quarter. Work down by <a href="managing-many-admin-dashboards.html">tier</a>, so the hour is always spent on the highest-consequence accounts first.</p>
+
+  <div class="callout">
+    <div class="callout-title">The one prerequisite</div>
+    <p>You need the inventory. Without a list of accounts, a review becomes a memory exercise and you'll miss exactly the forgotten accounts that most need looking at. If you don't have one yet, spend the first session building it — that <em>is</em> the first review.</p>
+  </div>
+
+  <h2>The six checks</h2>
+
+  <h3>1. People who shouldn't still be there</h3>
+
+  <p>Open the user list on each Tier 1 and Tier 2 service and read every name. You're looking for former staff, former contractors, an agency you stopped working with, and the personal address of someone who now has a company one.</p>
+
+  <p>Two things reliably survive an offboarding that looked complete: accounts on services nobody remembered were in use, and accounts under a personal email address that didn't match the pattern anyone searched for. Reading the list beats searching it.</p>
+
+  <h3>2. Permissions that outgrew their purpose</h3>
+
+  <p>For everyone still on the list, ask whether their role still matches what they do. The usual finding is a cluster of Admins who needed admin once, for one task, in a hurry.</p>
+
+  <p>Downgrading is low-risk and easily reversed — if you cut too deep, someone asks and you restore it in thirty seconds. Compare that to the cost of a compromised admin account, and the asymmetry is obvious.</p>
+
+  <h3>3. Tokens, keys, and connected apps</h3>
+
+  <p>The most-neglected check and often the most productive. Look for API keys and personal access tokens, OAuth grants to third-party applications, app-specific passwords, webhooks pointing at endpoints you no longer run, and SSH or deploy keys.</p>
+
+  <p>These persist independently of the account that created them. Disabling a user often leaves their tokens working. Revoke anything you can't positively identify — a token nobody can explain is either unused or unknown, and both are reasons to remove it. See the <a href="api-keys-and-long-lived-tokens.html">tokens guide</a> for what to look for on each type of service.</p>
+
+  <h3>4. Shared credentials</h3>
+
+  <p>Pull up your shared vault collections and, for each item, ask three questions: is it still needed at all; is the group still correct; and has the vendor added real user management since you last checked?</p>
+
+  <p>That third one changes more often than you'd expect. Products add seats and roles as they mature, and nobody sends you a note when yours does. A shared login that was unavoidable two years ago may be avoidable now — check before renewal, when you have leverage.</p>
+
+  <h3>5. Recovery paths</h3>
+
+  <p>Quick but important, and Tier 1 only. On each account, look at the recovery email addresses and phone numbers on file. Remove anything belonging to someone who left, any number you no longer control, and any address at a provider you've stopped using.</p>
+
+  <p>A stale recovery contact is a live credential in someone else's hands. Phone numbers get reassigned; old work addresses get reissued.</p>
+
+  <h3>6. Accounts you no longer need</h3>
+
+  <p>The trial you never cancelled, the tool replaced by another tool, the client whose contract ended. Each one holds data, has credentials attached, and is watched by nobody.</p>
+
+  <p>Close them properly — export anything you're required to keep, then delete the account rather than just letting the subscription lapse. A cancelled subscription often leaves the account and its data intact and still reachable with the old password.</p>
+
+  <h2>Working the hour</h2>
+
+  <p>A rough allocation that fits:</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Minutes</th><th>What</th></tr></thead>
+    <tbody>
+      <tr><td>0–20</td><td>Tier 1: all six checks, thoroughly. Never skip this block.</td></tr>
+      <tr><td>20–40</td><td>Tier 2: users, permissions, tokens.</td></tr>
+      <tr><td>40–50</td><td>Shared credentials across all tiers.</td></tr>
+      <tr><td>50–60</td><td>Write down what you changed and where you stopped.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>Tier 3 gets whatever is left, which is usually nothing. That's the correct trade — a stale user on a reporting dashboard is a much smaller problem than a stale token on your cloud account.</p>
+
+  <p>The last ten minutes matter more than they look. A short note — what you removed, what you deliberately left, where the hour ran out — turns four disconnected hours a year into something cumulative. Next quarter starts where this one stopped instead of starting over.</p>
+
+  <h2>What to skip</h2>
+
+  <p>Reviews collapse under their own weight when they try to do too much. Explicitly out of scope:</p>
+
+  <ul>
+    <li><strong>Reading audit logs.</strong> Valuable during an incident, not a good use of a routine hour. You're reviewing <em>state</em>, not history.</li>
+    <li><strong>Rotating passwords.</strong> Rotate on events, not on a calendar — see <a href="password-hygiene-at-scale.html">password hygiene</a>. A review that turns into a rotation project won't get finished.</li>
+    <li><strong>Fixing everything you find.</strong> Remove what's clearly wrong, and write down what needs a conversation. The review's job is to surface, not to resolve.</li>
+    <li><strong>Perfect coverage.</strong> Tier 3 can wait a year. It genuinely can.</li>
+  </ul>
+
+  <h2>Events that trigger a review outside the schedule</h2>
+
+  <p>The quarterly cadence catches drift. Some things shouldn't wait for it:</p>
+
+  <ul>
+    <li>Someone leaves — run the offboarding list in the <a href="sharing-dashboard-access-with-a-team.html">access-sharing guide</a> immediately.</li>
+    <li>A contract or client relationship ends.</li>
+    <li>A breach is disclosed at a service you use.</li>
+    <li>A device is lost or stolen.</li>
+    <li>You inherit a system from someone else — review before you rely on it, not after.</li>
+  </ul>
+
+  <h2>Making the next one faster</h2>
+
+  <p>Each review should be quicker than the last, and a few habits compound:</p>
+
+  <p>Record grant dates and reasons when you add access, so future-you doesn't have to reconstruct why someone has admin. Prefer time-boxed access wherever a platform offers it, so some of the cleanup happens without you. Keep the inventory current as you add services rather than rebuilding it each quarter. And note which services have real user management and which don't — that turns "check whether they support seats now" from a full sweep into a short list.</p>
+
+  <p>None of this is sophisticated. It's the discipline of looking, on a schedule, at a list you already have — and it's the difference between an offboarding you can prove was complete and one you're hoping was.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="api-keys-and-long-lived-tokens.html">API keys and tokens: the credentials you forget you issued</a></li>
+      <li><a href="sharing-dashboard-access-with-a-team.html">Sharing dashboard access with a team without sharing passwords</a></li>
+      <li><a href="documenting-access-for-handover.html">Documenting your access setup so someone else can take over</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

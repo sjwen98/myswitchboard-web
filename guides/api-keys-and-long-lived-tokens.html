@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>API keys and tokens: the credentials you forget you issued — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Long-lived tokens survive password changes and offboarding. How to find the ones you already have, scope new ones properly, and rotate them without breaking production.">
+<meta name="keywords" content="API key management, personal access tokens, revoke OAuth grants, token rotation, secret scanning">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/api-keys-and-long-lived-tokens.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/api-keys-and-long-lived-tokens.html">
+<meta property="og:title" content="API keys and tokens: the credentials you forget you issued">
+<meta property="og:description" content="Long-lived tokens survive password changes and offboarding. How to find the ones you already have, scope new ones properly, and rotate them without breaking production.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; API keys and tokens</div>
+
+  <h1>API keys and tokens: the credentials you forget you issued</h1>
+  <p class="meta">Practical guides &middot; About 7 minutes</p>
+
+  <p class="lede">You changed the password, enabled 2FA, and removed the departing colleague's account. The integration they set up eighteen months ago is still running, still authenticated, and still has write access. Long-lived tokens are the credentials that don't show up in a user list and don't care what you did to the password — which is exactly why they're worth a guide of their own.</p>
+
+  <h2>Why tokens behave differently</h2>
+
+  <p>A password is checked at login and produces a session that expires. A token <em>is</em> the session, and usually one without an expiry date. That difference produces several properties people find surprising in the moment:</p>
+
+  <ul>
+    <li><strong>Changing the password doesn't revoke them.</strong> On most platforms an existing token keeps working after a password reset. This is deliberate — you don't want every integration to break when someone rotates a password — and it means a password change is not a complete response to a compromise.</li>
+    <li><strong>2FA doesn't apply.</strong> Tokens exist precisely so software can authenticate without a human present. There is no second factor to satisfy.</li>
+    <li><strong>Disabling the user often isn't enough.</strong> Behaviour varies: some platforms revoke a user's tokens when the account is suspended, many don't. Assume they don't unless you've verified otherwise.</li>
+    <li><strong>They're frequently over-scoped.</strong> The path of least resistance at creation time is to tick everything, and nobody comes back to narrow it later.</li>
+    <li><strong>They leak in places passwords don't.</strong> Committed to a repository, pasted into a CI config, sitting in an environment file, logged in a stack trace, included in a support ticket.</li>
+  </ul>
+
+  <h2>Finding what you've already issued</h2>
+
+  <p>Start by assuming you have more than you think. Places to look, roughly in order of how much trouble each can cause:</p>
+
+  <p><strong>Per-user tokens.</strong> Most platforms have a "personal access tokens", "API keys", or "developer settings" page under the user profile. These carry the permissions of the person who made them, which is often more than the integration needed.</p>
+
+  <p><strong>Connected applications and OAuth grants.</strong> A separate list, usually under "authorised apps", "connected accounts", or "third-party access". These are the ones you clicked through years ago — the analytics tool, the scheduler, the browser extension that wanted access to your mail. Anything unrecognised gets revoked.</p>
+
+  <p><strong>Service accounts and machine users.</strong> Accounts created for automation rather than a person. They're easy to overlook precisely because they don't correspond to anyone, and they're often the most privileged things you own.</p>
+
+  <p><strong>Webhooks.</strong> Not credentials exactly, but they push your data somewhere. A webhook aimed at a URL nobody recognises is worth investigating and then deleting.</p>
+
+  <p><strong>Deploy keys and SSH keys.</strong> On code hosting, these grant repository access independent of any user account.</p>
+
+  <p><strong>App-specific passwords.</strong> Where a provider issues a separate password so a legacy client can bypass 2FA. Every one is a permanent, single-factor way into the account.</p>
+
+  <div class="callout">
+    <div class="callout-title">The rule for unidentifiable tokens</div>
+    <p>If you can't say what a token is for, revoke it. Either nothing breaks — in which case it shouldn't have existed — or something breaks loudly and you've just discovered an undocumented dependency, which you needed to know about anyway. Do this on a Tuesday morning, not a Friday afternoon.</p>
+  </div>
+
+  <h2>Issuing them properly</h2>
+
+  <p>Every new token is a small decision that compounds. Six habits keep it manageable:</p>
+
+  <p><strong>Name it for its job.</strong> <code>ci-deploy-staging</code>, not <code>test</code> or <code>new key</code>. The name is the only context the next person gets, and there will be a next person even if that's you in a year.</p>
+
+  <p><strong>Scope it down.</strong> Read-only unless it genuinely writes. One service's data rather than all of it. If a platform supports resource-level or repository-level scoping, use it — this is the single most effective control here, because it caps the damage of a leak rather than trying to prevent one.</p>
+
+  <p><strong>Set an expiry.</strong> Where the platform allows it, always. A token that expires is a token you're forced to review. Renewal friction is the point.</p>
+
+  <p><strong>Prefer a machine identity over a person's token.</strong> A token tied to an individual dies with their account, breaking production at the worst time, and carries their full permissions. A dedicated service account can be scoped narrowly and survives staff changes.</p>
+
+  <p><strong>Restrict by network where you can.</strong> An IP allowlist on a token used by fixed infrastructure means a leaked token is useless from anywhere else. Rarely available, extremely effective when it is.</p>
+
+  <p><strong>Record it.</strong> One line in your <a href="managing-many-admin-dashboards.html">inventory</a>: what it is, what it can do, what depends on it, when it expires. This is what makes the <a href="quarterly-access-review.html">quarterly review</a> possible instead of archaeological.</p>
+
+  <h2>Where they should live</h2>
+
+  <p>Tokens are credentials and belong in the same place as your other credentials, with one addition: whatever system runs the automation needs a secret store.</p>
+
+  <ul>
+    <li><strong>In your password manager</strong> for the copy you keep — with the same care as a password.</li>
+    <li><strong>In your platform's secret store</strong> for the copy the software uses — CI secrets, environment configuration in a hosting provider, a dedicated secrets manager.</li>
+    <li><strong>Never in a repository.</strong> Not even a private one. Repositories get forked, cloned to laptops, backed up, and occasionally made public by accident. Committed secrets also persist in history after you delete the line, which means removal requires rewriting history, not just a follow-up commit.</li>
+    <li><strong>Never in a ticket, chat, or shared doc.</strong> Same reasoning as passwords, and worse — tokens get pasted into support threads far more casually.</li>
+  </ul>
+
+  <p>If your code host offers automatic secret scanning, turn it on. It catches the accidental commit before someone else does.</p>
+
+  <h2>Rotating without breaking production</h2>
+
+  <p>The reason token rotation gets avoided is the fear of taking something down. The technique that removes that fear is straightforward, and it's worth knowing before you need it in a hurry:</p>
+
+  <ol>
+    <li><strong>Create the new token first</strong>, scoped to what the job actually needs — not necessarily what the old one had.</li>
+    <li><strong>Deploy the new token everywhere it's used.</strong> Both tokens are now valid, so nothing is down.</li>
+    <li><strong>Verify the new one is in use.</strong> Many platforms show a "last used" timestamp on each token — the old one going quiet is your confirmation.</li>
+    <li><strong>Wait through one full cycle</strong> of whatever uses it. A monthly batch job means waiting a month before step 5.</li>
+    <li><strong>Revoke the old token.</strong></li>
+    <li><strong>Watch for failures</strong> for a day. If something breaks, you know exactly what caused it.</li>
+  </ol>
+
+  <p>The one case where you skip the overlap is a confirmed leak. Then revoke first and repair afterwards — a broken integration is a smaller problem than an active token in someone else's hands.</p>
+
+  <h2>When a token leaks</h2>
+
+  <p>Order matters here, and the instinct to investigate first is the wrong one:</p>
+
+  <ol>
+    <li><strong>Revoke it.</strong> Immediately. Before understanding what happened, before telling anyone. Every minute it stays valid is a minute of exposure, and you can investigate a revoked token just as well.</li>
+    <li><strong>Issue a replacement</strong> and restore the service.</li>
+    <li><strong>Check what it did.</strong> Audit logs on the affected service, filtered to that token or service account. You're looking for activity you can't attribute.</li>
+    <li><strong>Look for what it created.</strong> A token with sufficient permissions can mint other tokens, add users, or set up forwarding. Revoking the original doesn't undo any of that.</li>
+    <li><strong>Purge the exposure.</strong> If it was committed, remember that removing the line doesn't remove it from history. If it was in a chat or ticket, delete the message and check exports.</li>
+    <li><strong>Fix the cause.</strong> A token in a repository usually means the workflow made that the easy option. Secret scanning and a proper secret store fix the class of problem; deleting one commit fixes one instance.</li>
+  </ol>
+
+  <h2>Add tokens to your offboarding list</h2>
+
+  <p>Worth stating separately because it's the step most often missed. When someone leaves, disabling their account may leave every token they created fully functional. Go through each Tier 1 and Tier 2 service and revoke tokens they issued — and if any of those tokens are load-bearing, that's a signal to replace them with a service account rather than simply reissuing under someone else's name.</p>
+
+  <p>The same applies when an integration is retired. Removing the tool from your stack should include revoking its access; a decommissioned service with a live token pointed at your data is a strange thing to leave running.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="quarterly-access-review.html">A quarterly access review you can finish in an hour</a></li>
+      <li><a href="sharing-dashboard-access-with-a-team.html">Sharing dashboard access with a team without sharing passwords</a></li>
+      <li><a href="new-client-access-checklist.html">Setting up a new client or project: an access checklist</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

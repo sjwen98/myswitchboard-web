@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Why you're always logged out of the wrong thing — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Session cookies, refresh tokens, remember-me, and device trust — what actually determines how long a site keeps you signed in, and how to work with it instead of against it.">
+<meta name="keywords" content="session cookies, session timeout, refresh token, remember this device, why am I logged out">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/session-lifetimes-and-cookies.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/session-lifetimes-and-cookies.html">
+<meta property="og:title" content="Why you&#x27;re always logged out of the wrong thing">
+<meta property="og:description" content="Session cookies, refresh tokens, remember-me, and device trust — what actually determines how long a site keeps you signed in, and how to work with it instead of against it.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Sessions and cookies</div>
+
+  <h1>Why you're always logged out of the wrong thing</h1>
+  <p class="meta">Practical guides &middot; About 7 minutes</p>
+
+  <p class="lede">One dashboard keeps you signed in for months. Another throws you out after twenty minutes of reading. A third logs you out only on the laptop, never the phone. This isn't random, and understanding the machinery underneath makes the difference between fighting your tools and planning around them.</p>
+
+  <h2>What "logged in" actually means</h2>
+
+  <p>A website has no memory of you between requests. Every page load is a fresh conversation, and "being logged in" is entirely a matter of your browser presenting a token that the server recognises.</p>
+
+  <p>You supply a password once. In exchange the server issues a credential — almost always stored in a cookie — and your browser sends it back with every subsequent request. Logging out means discarding it. Being logged out unexpectedly means it expired, was invalidated, or never got stored in the first place.</p>
+
+  <p>Everything that follows is a consequence of how a given site chose to manage that token.</p>
+
+  <h2>The three lifetimes that matter</h2>
+
+  <p>Most confusing behaviour comes from one of three overlapping clocks.</p>
+
+  <p><strong>Session cookies</strong> have no expiry date and are meant to be discarded when the browser closes. This produces the "why am I logged out every morning?" pattern — and also the opposite surprise, because browsers that restore your previous tabs on launch often restore these cookies too. Same setting, opposite outcomes, depending on how you quit the browser.</p>
+
+  <p><strong>Persistent cookies</strong> carry an explicit expiry — hours, weeks, sometimes a year. This is what a "remember me" checkbox typically switches on. The site decides the duration and you generally can't see it without inspecting the cookie.</p>
+
+  <p><strong>Idle versus absolute timeouts.</strong> An idle timeout ends the session after a period of inactivity, refreshing every time you act. An absolute timeout ends it a fixed time after login regardless of activity. Banking and infrastructure tools often apply both, which is why you can be typing and still get thrown out — you've hit the absolute limit, and no amount of activity extends it.</p>
+
+  <div class="callout">
+    <div class="callout-title">The one that catches people</div>
+    <p>An absolute timeout can't be avoided by staying active. If a service logs you out mid-task at what feels like a consistent interval from when you signed in, that's what you're hitting. Save your work before the boundary rather than fighting it.</p>
+  </div>
+
+  <h2>Why long sessions exist at all</h2>
+
+  <p>Modern applications often use a short-lived access token — minutes — alongside a long-lived refresh token. Your browser quietly exchanges the refresh token for a new access token in the background, so you stay signed in for weeks while any single leaked token is only briefly useful.</p>
+
+  <p>This is a genuine security improvement, and it explains two things you've probably noticed. It's why "sign out of all devices" works properly on some services: they revoke the refresh token, so the next background exchange fails everywhere. And it's why other services take a while to actually cut off a revoked session — the existing access token stays valid until it expires on its own.</p>
+
+  <h2>Why the durations differ so much</h2>
+
+  <p>Every product makes its own trade between friction and exposure, and the pattern is consistent enough to predict:</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Type of service</th><th>Typical behaviour</th><th>Reasoning</th></tr></thead>
+    <tbody>
+      <tr><td>Banking, payments</td><td>Short idle timeout plus an absolute cap</td><td>Direct financial loss; regulatory expectations</td></tr>
+      <tr><td>Cloud infrastructure, registrars</td><td>Moderate, with re-authentication for sensitive actions</td><td>High blast radius, but daily-use tooling</td></tr>
+      <tr><td>Analytics, marketing, helpdesk</td><td>Weeks or months</td><td>Read-heavy, lower consequence, friction hurts adoption</td></tr>
+      <tr><td>Consumer platforms</td><td>Effectively indefinite</td><td>Any logout is a chance to not come back</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The consequence for anyone managing many dashboards is that you're permanently in a partial state — never logged into everything, never logged out of everything. That unpredictability, more than the raw number of logins, is what makes the work feel heavy, and it's why <a href="managing-many-admin-dashboards.html">batching logins by group</a> helps more than trying to stay signed in everywhere.</p>
+
+  <h2>Step-up authentication</h2>
+
+  <p>A pattern worth recognising: you're signed in, you go to change a payout destination or delete something, and the site asks for your password again. That's step-up authentication — the session proves you were you at some point, and for a consequential action the site wants proof you're at the keyboard <em>now</em>.</p>
+
+  <p>It's good design, and it means a stolen session cookie can browse but not necessarily do damage. It also means the prompt is a signal: if you're asked to re-authenticate for something you didn't initiate, stop and look at what's actually being requested.</p>
+
+  <h2>Things that log you out unexpectedly</h2>
+
+  <p>When a session dies earlier than it should, the cause is usually one of these:</p>
+
+  <ul>
+    <li><strong>Browser settings clearing cookies on exit.</strong> Common in privacy-focused configurations and easy to forget you enabled. Most browsers let you exempt specific sites — do that for the dashboards you use daily rather than turning the protection off entirely.</li>
+    <li><strong>Private or incognito windows.</strong> Everything is discarded on close, by design.</li>
+    <li><strong>Cookie-clearing extensions or cleanup tools</strong> running on a schedule.</li>
+    <li><strong>Password changes.</strong> Many services invalidate all sessions when the password changes — usually correct behaviour, occasionally surprising.</li>
+    <li><strong>IP or device changes.</strong> Some security-conscious services tie a session loosely to a network or device fingerprint. Switching networks or connecting to a VPN can end it.</li>
+    <li><strong>Concurrent session limits.</strong> A few services allow only one active session, so signing in on your phone silently ends the one on your laptop.</li>
+    <li><strong>Server-side invalidation.</strong> After a security incident, a permission change, or a deploy, a service may revoke everything at once.</li>
+  </ul>
+
+  <h2>Device trust and "remember this device"</h2>
+
+  <p>Separate from the login session, this is a second cookie that tells the site not to ask for your second factor again on this browser. It usually lasts far longer than the session itself — often a month or more.</p>
+
+  <p>Two practical implications. It's the reason you can be logged out and still not be asked for a code: the session expired, the device-trust cookie didn't. And it's a real credential in its own right — anyone with that browser profile skips your second factor entirely. Never tick "remember this device" on a shared or borrowed machine, and when a device is lost, look for a "forget all trusted devices" option, which is a distinct action from ending sessions.</p>
+
+  <h2>Working with the grain</h2>
+
+  <p>A few habits that reduce the friction without weakening anything:</p>
+
+  <p><strong>Note the rough session length in your inventory</strong> as you learn it. This converts a recurring surprise into something you can plan around: you'll know that the weekly reporting cluster always needs a fresh login and the daily set usually doesn't.</p>
+
+  <p><strong>Use "remember me" on Tier 3, skip it on Tier 1.</strong> Long sessions on low-consequence dashboards cost you almost nothing. On your registrar or cloud root, the friction is the feature.</p>
+
+  <p><strong>Keep separate browser profiles for separate identities.</strong> Cookies are scoped per profile, so two profiles can hold two logins to the same service simultaneously — which beats logging out and back in all day. Covered in the <a href="browser-profiles-and-multi-account-workflows.html">browser profiles guide</a>.</p>
+
+  <p><strong>Exempt your daily dashboards from cookie clearing</strong> rather than disabling it globally.</p>
+
+  <p><strong>Batch by cluster, not by task.</strong> Since you can't predict which sessions have expired, stop treating logins as interruptions and handle a whole group in one pass. You pay the context-switching cost once.</p>
+
+  <h2>When you actually want to end a session</h2>
+
+  <p>Closing the tab does nothing — the cookie is still there and the session is still valid. Three levels of thoroughness, worth knowing which is which:</p>
+
+  <ol>
+    <li><strong>Sign out</strong> in the application. Ends that one session properly.</li>
+    <li><strong>"Sign out everywhere"</strong> or "end all sessions" in security settings. Revokes the refresh tokens too, which is what you want after losing a device.</li>
+    <li><strong>Revoke trusted devices</strong> — a separate setting on most services, and the one people forget. Ending sessions does not remove device trust, so a recovered laptop can still skip your second factor.</li>
+  </ol>
+
+  <p>After a lost or stolen device, do all three, then check for <a href="api-keys-and-long-lived-tokens.html">tokens and connected apps</a>. Sessions are the visible layer; tokens are the one that outlives everything else.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="browser-profiles-and-multi-account-workflows.html">Browser profiles and multi-account workflows</a></li>
+      <li><a href="managing-many-admin-dashboards.html">How to manage logins for 20+ admin dashboards without losing track</a></li>
+      <li><a href="api-keys-and-long-lived-tokens.html">API keys and tokens: the credentials you forget you issued</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

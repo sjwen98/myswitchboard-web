@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>How to manage logins for 20+ admin dashboards — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A practical system for keeping control of dozens of admin dashboards: build an inventory, rank accounts by blast radius, match storage to each tier, and turn the daily login grind into a routine.">
+<meta name="keywords" content="manage multiple admin dashboards, account inventory, blast radius tiering, session lifetime, admin login workflow">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/managing-many-admin-dashboards.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/managing-many-admin-dashboards.html">
+<meta property="og:title" content="How to manage logins for 20+ admin dashboards">
+<meta property="og:description" content="A practical system for keeping control of dozens of admin dashboards: build an inventory, rank accounts by blast radius, match storage to each tier, and turn the daily login grind into a routine.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Managing many dashboards</div>
+
+  <h1>How to manage logins for 20+ admin dashboards without losing track</h1>
+  <p class="meta">Practical guides &middot; About 7 minutes</p>
+
+  <p class="lede">The problem creeps up on you. You start with a CMS and a mail provider. Two years later there's a payment processor, three ad platforms, a DNS registrar, two analytics tools, a helpdesk, a status page, a CI provider, and four client dashboards you inherited from someone who left. Nobody decided to build this; it accumulated. This guide is about getting back in front of it.</p>
+
+  <h2>Start with an inventory, not a password manager</h2>
+
+  <p>The instinct is to open a password manager and start typing. Skip that for an hour. The reason people lose control of dozens of accounts isn't bad storage — it's that no single list of the accounts exists anywhere. You cannot rotate, audit, or hand over what you haven't written down.</p>
+
+  <p>Open a spreadsheet and give it one row per <em>login</em>, not per service. If you have two accounts on the same ad platform for two different clients, that's two rows. Columns worth having from day one:</p>
+
+  <ul>
+    <li><strong>Service</strong> — the product name.</li>
+    <li><strong>Login URL</strong> — the exact page, not the marketing homepage. Many services have a separate <code>admin.</code> or <code>app.</code> host, and some have a completely different URL for SSO logins.</li>
+    <li><strong>Identity</strong> — which email or username signs in. This is the column people most often can't fill in from memory, and it's the one that causes the most wasted time later.</li>
+    <li><strong>Auth method</strong> — password, Google/social sign-in, SSO, or magic link. These behave very differently and it matters enormously for the rest of this guide.</li>
+    <li><strong>Second factor</strong> — none, SMS, TOTP app, hardware key. Note <em>where</em> the factor lives, not just that it exists.</li>
+    <li><strong>Who else has access</strong> — even if the answer is "just me", write it.</li>
+    <li><strong>What it can do</strong> — one short phrase. "Can issue refunds." "Can change DNS." "Read-only reporting."</li>
+  </ul>
+
+  <p>That last column is the one that turns a list into a plan. Expect the inventory to take longer than you think and to surface at least one account nobody remembered was still active. That discovery alone usually justifies the exercise.</p>
+
+  <h2>Rank by blast radius, not by how often you log in</h2>
+
+  <p>Not all of these accounts deserve the same treatment. The useful axis is <strong>blast radius</strong>: if someone else got into this account tonight, how bad would tomorrow be, and could you undo it?</p>
+
+  <p>A rough three-tier split works for most people:</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>What lands here</th><th>Why</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Tier&nbsp;1 — root</td>
+        <td>Domain registrar, DNS, primary email, cloud provider root, password manager itself, code hosting</td>
+        <td>These control the recovery path for everything else. Losing the registrar or the recovery mailbox means losing the ability to reclaim the rest.</td>
+      </tr>
+      <tr>
+        <td>Tier&nbsp;2 — money and customer data</td>
+        <td>Payment processor, billing, ad accounts with a card attached, CRM, anything holding customer records</td>
+        <td>Direct financial loss or a reportable data incident, but recoverable if you still hold Tier&nbsp;1.</td>
+      </tr>
+      <tr>
+        <td>Tier&nbsp;3 — operational</td>
+        <td>Analytics, helpdesk, status page, scheduling tools, reporting dashboards</td>
+        <td>Annoying to lose, rarely catastrophic. This is where most of your daily logins actually are.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The point of the ranking is that it lets you spend your limited patience where it pays off. Hardening twelve Tier&nbsp;3 reporting dashboards while your domain registrar still uses SMS codes is effort spent in the wrong place.</p>
+
+  <div class="callout">
+    <div class="callout-title">Rule of thumb</div>
+    <p>Work down the tiers, and finish a tier before starting the next. Tier&nbsp;1 is usually five to eight accounts. If you do nothing else from this guide, do Tier&nbsp;1 properly this week.</p>
+  </div>
+
+  <h2>Match the storage to the tier</h2>
+
+  <p>Once accounts are ranked, storage stops being a single decision and becomes three.</p>
+
+  <p><strong>Tier&nbsp;1</strong> should be the smallest, most deliberate set. Long unique passwords, a hardware key or a TOTP app rather than SMS, and — critically — recovery details you have actually tested. Do not store a Tier&nbsp;1 second factor on the same device that holds the Tier&nbsp;1 password if you can avoid it. These accounts are logged into rarely enough that a little friction costs you almost nothing.</p>
+
+  <p><strong>Tier&nbsp;2</strong> wants strong storage plus an access trail. If more than one person touches these, prefer the service's own user management over a shared login, so that actions are attributable to a person. We cover that in detail in the guide on <a href="sharing-dashboard-access-with-a-team.html">sharing access without sharing passwords</a>.</p>
+
+  <p><strong>Tier&nbsp;3</strong> is where volume lives, and where automation earns its keep. These are the accounts you open every morning, and the ones where friction actually changes behaviour: if logging in is tedious, people start reusing passwords, staying signed in on shared machines, or writing credentials somewhere convenient and terrible.</p>
+
+  <h2>Fix the naming before it becomes archaeology</h2>
+
+  <p>Twenty entries called "Dashboard", "Dashboard 2", and "client login (new)" are a slow-motion disaster. Pick one naming scheme and apply it to everything, including the entries you already have.</p>
+
+  <p>A scheme that survives contact with reality looks like <code>Service — Account — Role</code>:</p>
+
+  <ul>
+    <li><code>Stripe — Northwind — admin</code></li>
+    <li><code>Stripe — Northwind — read-only</code></li>
+    <li><code>Cloudflare — personal — DNS</code></li>
+  </ul>
+
+  <p>Consistent, front-loaded names sort usefully, search predictably, and — the real payoff — make it obvious when you're about to log in with the wrong identity. Most "why can't I see the setting?" support tickets are actually "you're signed in as the wrong account".</p>
+
+  <h2>Session lifetime is the variable nobody accounts for</h2>
+
+  <p>Here's the thing that makes multi-dashboard work uniquely annoying, and it isn't the passwords. Every service picks its own session length, and they range from a few hours to essentially forever. Financial and infrastructure tools tend to expire aggressively. Marketing and analytics tools often keep you signed in for weeks.</p>
+
+  <p>The practical consequence: you are never logged out of everything at once and you are never logged into everything at once. You're perpetually in a partial state, so every task starts with an unpredictable amount of re-authentication. That unpredictability, more than the total number of logins, is what makes the work feel heavy.</p>
+
+  <p>Two things help. First, note the rough session length in your inventory once you learn it — it turns a surprise into a schedule. Second, stop treating logins as interruptions to be handled one at a time and start treating them as a batch.</p>
+
+  <h2>Turn the grind into a routine</h2>
+
+  <p>Group your dashboards by <em>when you actually need them</em> rather than by what they are:</p>
+
+  <ul>
+    <li><strong>Every morning</strong> — the three or four you genuinely check daily.</li>
+    <li><strong>Weekly reporting</strong> — the set you only open to pull numbers on a fixed day.</li>
+    <li><strong>Per client or per project</strong> — the cluster you need together, or not at all.</li>
+    <li><strong>Rarely</strong> — the registrar, the billing portal. Deliberately high-friction, and that's correct.</li>
+  </ul>
+
+  <p>Then open each group as a group. Doing all of one cluster's logins in a single pass costs far less attention than scattering them across the day, because you pay the context-switching cost once. This is exactly the pattern <a href="../index.html">mySwitchBoard</a> automates — each site in a selected group opens as its own real browser tab and signs itself in, in sequence — but the grouping habit is worth adopting regardless of what tool you use.</p>
+
+  <h2>Plan for the day it goes wrong</h2>
+
+  <p>An inventory is also a recovery document, and it's worth spending twenty minutes making it one. For your Tier&nbsp;1 accounts specifically, confirm you can answer these without guessing:</p>
+
+  <ul>
+    <li>Which mailbox receives the password-reset email — and is <em>that</em> mailbox itself Tier&nbsp;1 protected?</li>
+    <li>Where are the backup codes, and have you ever verified one works?</li>
+    <li>If your phone vanished right now, could you get into the registrar and the primary mailbox?</li>
+    <li>Is there a recovery phone number attached that you no longer control?</li>
+  </ul>
+
+  <p>The circular dependency in the first question catches a startling number of people: the account that recovers everything else is protected by a factor stored only on the device you just lost. Break that loop before you need it.</p>
+
+  <div class="callout">
+    <div class="callout-title">Test it, don't assume it</div>
+    <p>Once a year, pick one Tier&nbsp;1 account and actually run the recovery flow. Reading the documented process is not the same as discovering that the recovery address is an alias that stopped forwarding in 2023.</p>
+  </div>
+
+  <h2>A short checklist</h2>
+
+  <ol>
+    <li>List every login, one row each, including the identity used.</li>
+    <li>Tag each row Tier&nbsp;1, 2, or 3 by blast radius.</li>
+    <li>Harden Tier&nbsp;1 completely before touching anything else.</li>
+    <li>Rename everything to one consistent scheme.</li>
+    <li>Note session lifetimes as you learn them.</li>
+    <li>Group the rest by when you use them, and log in by group.</li>
+    <li>Verify the recovery path for each Tier&nbsp;1 account, then diarise a yearly re-check.</li>
+  </ol>
+
+  <p>None of this is exotic. It's mostly the discipline of writing things down before the list gets long enough to be intimidating — which, if you're reading this, it probably already has.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="sharing-dashboard-access-with-a-team.html">Sharing dashboard access with a team without sharing passwords</a></li>
+      <li><a href="two-factor-authentication-many-accounts.html">Organising two-factor authentication across dozens of accounts</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

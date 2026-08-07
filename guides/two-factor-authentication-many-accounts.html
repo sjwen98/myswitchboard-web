@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Organising two-factor authentication across dozens of accounts — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How to rank second factors, store TOTP seeds and backup codes sensibly, handle 2FA on shared accounts, and rehearse losing your phone before it happens.">
+<meta name="keywords" content="two factor authentication many accounts, TOTP seed storage, backup codes, hardware security key, 2FA on shared accounts">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/two-factor-authentication-many-accounts.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/two-factor-authentication-many-accounts.html">
+<meta property="og:title" content="Organising two-factor authentication across dozens of accounts">
+<meta property="og:description" content="How to rank second factors, store TOTP seeds and backup codes sensibly, handle 2FA on shared accounts, and rehearse losing your phone before it happens.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Two-factor authentication</div>
+
+  <h1>Organising two-factor authentication across dozens of accounts</h1>
+  <p class="meta">Practical guides &middot; About 8 minutes</p>
+
+  <p class="lede">Turning on 2FA for one account is a two-minute job. Turning it on for forty is a filing problem, and filing problems fail differently: not with a breach, but with you standing in an airport holding a dead phone, locked out of the account that unlocks the others. This guide is about the filing.</p>
+
+  <h2>Know what each factor is actually protecting you from</h2>
+
+  <p>Second factors are usually presented as a ladder from worse to better, which is true but not very actionable. It's more useful to know which attack each one stops, because that tells you where to spend effort.</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th>Factor</th><th>Stops</th><th>Doesn't stop</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>SMS codes</td>
+        <td>Someone who only has your password</td>
+        <td>SIM swaps, and phishing pages that ask for the code and relay it instantly</td>
+      </tr>
+      <tr>
+        <td>TOTP app (6-digit rotating codes)</td>
+        <td>Password-only attackers, SIM swaps, carrier-level interception</td>
+        <td>Real-time phishing — the code is still something you can be tricked into typing elsewhere</td>
+      </tr>
+      <tr>
+        <td>Push approval</td>
+        <td>The same as TOTP, with less typing</td>
+        <td>"Approval fatigue" — repeated prompts until someone taps yes to make them stop</td>
+      </tr>
+      <tr>
+        <td>Hardware security key / passkey</td>
+        <td>All of the above, <em>including</em> real-time phishing, because the key checks the site's identity before responding</td>
+        <td>Someone with physical possession of the key and your unlocked device</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The important row is the last one. Hardware keys and passkeys are the only common factor that defends against a convincing fake login page, because the browser and key together verify which site is asking. A human being cannot reliably do that check at 8am on a phone screen, and it's unfair to expect them to.</p>
+
+  <div class="callout">
+    <div class="callout-title">Where to spend the effort</div>
+    <p>Put hardware keys or passkeys on the handful of Tier&nbsp;1 accounts that control everything else — registrar, DNS, primary email, cloud root, and your password manager. Use a TOTP app for everything else. That split gets you most of the protection for a manageable amount of work.</p>
+  </div>
+
+  <p>SMS is worth a note of nuance: it is genuinely better than nothing, and for a Tier&nbsp;3 reporting tool that offers nothing else, take it. Just don't let it be the factor guarding an account that can reset your other accounts.</p>
+
+  <h2>The seed is the secret, not the code</h2>
+
+  <p>The QR code you scan when enabling a TOTP app isn't a one-time handshake — it encodes a shared secret, and anything holding that secret can generate valid codes forever. Two consequences follow, and most 2FA mishaps trace back to missing one of them.</p>
+
+  <p><strong>First: a screenshot of that QR code is a credential.</strong> If it's sitting in your camera roll, syncing to a photo cloud, or pasted into a setup ticket, treat it exactly as you'd treat the password. Delete it, or store it with the same care.</p>
+
+  <p><strong>Second: you can enrol the secret in more than one place.</strong> That is the fix for the "my phone died and now I'm locked out" problem, and it's much easier to do at setup time than to retrofit. Most services show a "can't scan the code?" link that reveals the secret as text — capture it while you're there.</p>
+
+  <p>Which leads to the question people actually argue about.</p>
+
+  <h3>Should TOTP codes live in your password manager?</h3>
+
+  <p>Storing TOTP seeds alongside passwords in the same vault means one compromised vault yields both factors — you've collapsed two factors into one. That's a real objection and it's why the purist answer is "keep them separate".</p>
+
+  <p>But the honest comparison isn't against a perfectly disciplined separate setup. It's against what people actually do when 2FA is inconvenient across forty accounts, which is to not turn it on, or to fall back to SMS. A vault that holds both, protected by a strong master password and a <em>hardware key</em>, is meaningfully better than a tidy theory nobody follows.</p>
+
+  <p>A reasonable middle position, and the one worth defaulting to:</p>
+
+  <ul>
+    <li><strong>Tier&nbsp;1 accounts</strong> — keep the factor separate from the password. Hardware key where supported; otherwise a dedicated authenticator app, not the vault.</li>
+    <li><strong>Everything else</strong> — the vault is fine, and the convenience is what keeps 2FA switched on everywhere.</li>
+    <li><strong>The vault itself</strong> — must never have its own second factor stored inside it. This sounds obvious and is nonetheless a real failure mode.</li>
+  </ul>
+
+  <h2>Backup codes deserve an actual filing decision</h2>
+
+  <p>Almost every service hands you a set of single-use recovery codes when you enable 2FA. Almost everyone closes that dialog and never thinks about them again. These codes bypass your second factor entirely — they are, functionally, spare keys.</p>
+
+  <p>Decide once where they go, and apply it every time:</p>
+
+  <ul>
+    <li>Store them somewhere that survives losing your phone <em>and</em> your laptop at the same time. If both your codes and your authenticator live on devices you carry in the same bag, you have one point of failure wearing two hats.</li>
+    <li>For Tier&nbsp;1, printed on paper in a physically secure place is not old-fashioned — it's the option with the fewest shared failure modes.</li>
+    <li>Label each set with the service and the account identity. An unlabelled block of sixteen-character strings is worthless in the moment you need it.</li>
+    <li>Cross codes off as you use them, and regenerate the set when you're running low.</li>
+    <li>Never store them in the same place as the factor they're meant to back up.</li>
+  </ul>
+
+  <h2>Buy the second hardware key</h2>
+
+  <p>If you go the hardware key route, register two from the start and put the second one somewhere physically separate — a drawer at home, a safe, wherever isn't your bag.</p>
+
+  <p>This is the single most-skipped step in every hardware key setup, and the reason is understandable: the second key costs money and solves a problem you don't have yet. But re-registering a lost key across every Tier&nbsp;1 account without a backup means falling all the way through to identity-verification support processes, which are slow, unpleasant, and occasionally unsuccessful. Register the backup at the same time as the primary, while you're already logged into everything and the account list is in front of you.</p>
+
+  <h2>The shared-account problem</h2>
+
+  <p>2FA on an account several people use is genuinely awkward, and the awkwardness is why teams turn it off. Don't. Options, best first:</p>
+
+  <p><strong>Stop sharing the account.</strong> Nearly always the right answer — see the <a href="sharing-dashboard-access-with-a-team.html">guide on sharing access</a>. Individual accounts make this whole problem disappear, since each person manages their own factor.</p>
+
+  <p><strong>Share the TOTP seed through the vault.</strong> Where the account genuinely can't be split, put the seed in the same shared vault collection as the password so any authorised person can generate a code. The factor is no longer strictly "something only you have" — but it still defeats a stolen-password attack, which is the threat you're realistically facing.</p>
+
+  <p><strong>Register multiple hardware keys.</strong> Many services allow several keys on one account. Where that's supported and the group is small, give each person their own registered key: shared account, unshared factors.</p>
+
+  <p>What not to do is route the factor through one person's phone. It makes that person a bottleneck, guarantees codes get relayed over chat, and ends — every time — with someone quietly disabling 2FA to get their work done.</p>
+
+  <h2>Protect the recovery path, not just the login</h2>
+
+  <p>Every 2FA setup has a back door, and it's usually your email account. If an attacker controls the mailbox that receives password resets, most of your second factors become negotiable — reset the password, complete the reset flow, and 2FA is often re-enrollable from there.</p>
+
+  <p>So: your primary email is Tier&nbsp;1, whatever else you decide. Give it the strongest factor available, and then audit what's attached to it.</p>
+
+  <ul>
+    <li>Remove recovery phone numbers you no longer control. An old number reassigned to a stranger is a live key in the lock.</li>
+    <li>Remove recovery email addresses at employers or providers you've left.</li>
+    <li>Check that your recovery address isn't itself protected by nothing but SMS — a chain is only as good as its weakest link, and this chain is short.</li>
+    <li>Watch for circular dependencies: account A recovers via account B, which recovers via account A. Both are then unrecoverable if you lose your device.</li>
+  </ul>
+
+  <p>That last one is more common than it sounds, and it's invisible until the day it matters.</p>
+
+  <h2>Rehearse losing your phone</h2>
+
+  <p>Set aside thirty minutes and walk through it deliberately. Not hypothetically — actually check each step.</p>
+
+  <ol>
+    <li>Your phone is gone. Can you still reach your password manager? (If its second factor was on that phone, stop here and fix it — this is the failure that cascades.)</li>
+    <li>Can you get into your primary email using something you still have?</li>
+    <li>Can you get into your registrar and DNS?</li>
+    <li>Find your backup codes. Not "know roughly where they are" — locate them.</li>
+    <li>Try one on a Tier&nbsp;3 account to confirm the codes are current and that you're reading them correctly.</li>
+    <li>Write down what you couldn't do, and fix those specific gaps.</li>
+  </ol>
+
+  <p>Most people discover exactly one broken link, and it's almost always the same one: the authenticator app was only ever on the lost phone, and the backup codes were saved into a note that syncs to it. Finding that on a quiet afternoon is a very different experience from finding it in an airport.</p>
+
+  <h2>Rolling it out without a lost weekend</h2>
+
+  <p>Don't try to do forty accounts in one sitting — attention fades and the last twenty get done badly. Go tier by tier, following your <a href="managing-many-admin-dashboards.html">inventory</a>. Do Tier&nbsp;1 properly in one focused session: hardware keys, backup codes filed, recovery paths audited. Then batch Tier&nbsp;2 and Tier&nbsp;3 into short sessions, and record in the inventory which factor each account uses and where it lives.</p>
+
+  <p>That last column is the whole point. An account with 2FA enabled and no record of where the factor lives isn't protected — it's a lockout with a delay on it.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="managing-many-admin-dashboards.html">How to manage logins for 20+ admin dashboards without losing track</a></li>
+      <li><a href="sharing-dashboard-access-with-a-team.html">Sharing dashboard access with a team without sharing passwords</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

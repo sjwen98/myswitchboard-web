@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Documenting your access setup so someone else can take over — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What a genuinely useful access handover document contains, what to leave out of it, and how to keep it current without it becoming a second job.">
+<meta name="keywords" content="access documentation, handover document, runbook, bus factor, credential handover">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/documenting-access-for-handover.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/documenting-access-for-handover.html">
+<meta property="og:title" content="Documenting your access setup so someone else can take over">
+<meta property="og:description" content="What a genuinely useful access handover document contains, what to leave out of it, and how to keep it current without it becoming a second job.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Handover documentation</div>
+
+  <h1>Documenting your access setup so someone else can take over</h1>
+  <p class="meta">Practical guides &middot; About 6 minutes</p>
+
+  <p class="lede">Every access setup eventually gets inherited — by a colleague, a successor, a client, or by you after eighteen months away from it. What they inherit is usually a vault full of entries with no explanation, which is only marginally better than nothing. The document that fixes this is smaller than you'd think, and it's worth writing before you need it.</p>
+
+  <h2>What the document is for</h2>
+
+  <p>Be clear about the job, because it determines what goes in.</p>
+
+  <p>It is <strong>not</strong> a place to store credentials. Those live in the password manager, and duplicating them into a document creates a second, weaker copy that goes stale. The document explains the <em>shape</em> of the setup: what exists, why, who owns it, and what depends on it.</p>
+
+  <p>The test to write against: could a competent person who has never seen your systems, given access to the vault, work out what everything is and what would break if they changed it? Credentials answer "how do I sign in". This answers everything else — and everything else is what actually takes weeks to reconstruct.</p>
+
+  <h2>The account table</h2>
+
+  <p>The core of it, and mostly a byproduct of the <a href="managing-many-admin-dashboards.html">inventory</a> you already have. One row per login:</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Column</th><th>Why it earns its place</th></tr></thead>
+    <tbody>
+      <tr><td>Service</td><td>The product name.</td></tr>
+      <tr><td>What it's for</td><td>One phrase in plain language. "Sends transactional email." Names alone don't survive a year.</td></tr>
+      <tr><td>Login URL</td><td>The exact page, including any separate SSO or admin host.</td></tr>
+      <tr><td>Identity</td><td>Which address or username signs in. The most-needed column, and the one nobody can answer from memory.</td></tr>
+      <tr><td>Auth method</td><td>Password, social, SSO, passkey. Determines how recovery works.</td></tr>
+      <tr><td>Second factor and where it lives</td><td>An account with 2FA and no record of the factor's location is a lockout waiting to happen.</td></tr>
+      <tr><td>Owner of record</td><td>Whose organisation and card. The column that prevents ownership disputes.</td></tr>
+      <tr><td>Who has access</td><td>Names, not "the team".</td></tr>
+      <tr><td>Tier</td><td>Blast radius. Tells a successor what to be careful with.</td></tr>
+      <tr><td>Depends on / depended on by</td><td>What breaks if this changes. The column people wish they'd had.</td></tr>
+      <tr><td>Vault location</td><td>Which collection holds the credential.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>That's a spreadsheet, and a spreadsheet is fine. Resist building anything more elaborate — tooling is how this turns into a project that doesn't get finished.</p>
+
+  <h2>The parts that aren't a table</h2>
+
+  <p>Rows capture state. These capture the reasoning, and they're what makes the difference between a list and a handover.</p>
+
+  <p><strong>The exceptions, with reasons.</strong> Every shared login, every over-broad permission, every account still on SMS 2FA — with why. "Vendor sells one seat; re-check at renewal in March" tells a successor this was a decision, not an oversight, and gives them the date to act on. Without it they either leave it alone forever or break something removing it.</p>
+
+  <p><strong>The recovery map.</strong> For Tier 1 only: which mailbox receives resets for what, where backup codes are filed, who the emergency contact is, and where the <a href="credential-backup-and-break-glass.html">break-glass kit</a> lives. Not the codes themselves — where they are.</p>
+
+  <p><strong>Long-lived tokens and integrations.</strong> What each token is for, what depends on it, when it expires. These are invisible in a user list and are the leftovers that most often break things or leave doors open — see the <a href="api-keys-and-long-lived-tokens.html">tokens guide</a>.</p>
+
+  <p><strong>The routines.</strong> The monthly report someone pulls, the quarterly review, the annual domain renewal. Tasks that only exist in one person's head are the ones that silently stop happening.</p>
+
+  <p><strong>Vendor contacts.</strong> Account manager, support portal, contract renewal dates. Trivial to note, genuinely tedious to reconstruct.</p>
+
+  <p><strong>Known problems.</strong> The account nobody can recover because it's registered to someone who left. The integration held together with a personal token. Writing these down is uncomfortable and it's the most valuable section — an inherited problem you were warned about is manageable; one you discover during an outage isn't.</p>
+
+  <div class="callout">
+    <div class="callout-title">The section people skip</div>
+    <p>Known problems. It reads like admitting failure. It's actually the difference between handing over a system and handing over an ambush — and every experienced successor will judge the handover by whether this section is honest.</p>
+  </div>
+
+  <h2>What to leave out</h2>
+
+  <ul>
+    <li><strong>Passwords, tokens, and TOTP seeds.</strong> The document says where they are; the vault holds them. A document containing credentials has to be protected like a vault and won't be.</li>
+    <li><strong>Backup codes.</strong> Same reasoning — record the location.</li>
+    <li><strong>Step-by-step UI instructions.</strong> They rot within months as interfaces change, and they're the bulk of most bloated handover docs. Document what and why; the how is discoverable.</li>
+    <li><strong>Anything the platform already shows.</strong> Don't mirror user lists — they drift out of date immediately and a successor should read the live one.</li>
+    <li><strong>Commentary about people.</strong> Facts about systems only.</li>
+  </ul>
+
+  <h2>Where it lives</h2>
+
+  <p>Somewhere your successor can reach without the access it describes — that's the constraint that rules out most options. A document explaining how to recover your accounts, stored in an account you can't recover, is a joke you only get to hear once.</p>
+
+  <p>Practically: a shared team drive or wiki that isn't gated behind the systems it documents, with the vault holding a note pointing to it. For a client engagement, hand over a copy as a deliverable. And keep an offline copy with the break-glass kit — this is the case where paper earns its place.</p>
+
+  <p>It contains no credentials, but it's still a map of your infrastructure and who has access to it. Treat it as internal, not public.</p>
+
+  <h2>Keeping it current without it becoming a job</h2>
+
+  <p>Documentation dies from maintenance cost. Three habits keep it alive:</p>
+
+  <p><strong>Update at the moment of change.</strong> Adding a service, granting access, issuing a token — one line, thirty seconds, while you're already there. Batched updates never happen.</p>
+
+  <p><strong>Attach it to something already scheduled.</strong> The <a href="quarterly-access-review.html">quarterly review</a> already walks the accounts; correcting the document as you go costs almost nothing and is the natural moment to do it.</p>
+
+  <p><strong>Keep it small enough to stay true.</strong> A hundred pages of screenshots is worse than two pages that are accurate, because nobody trusts a document they've caught being wrong. Cut anything you won't maintain.</p>
+
+  <p>Date it. A document with no date has unknown reliability, and a successor will assume the worst — correctly.</p>
+
+  <h2>The handover itself</h2>
+
+  <p>When it's time, the document does most of the work, but a few things only happen live:</p>
+
+  <ol>
+    <li><strong>Walk through it together</strong> rather than emailing a link. An hour of questions surfaces the assumptions you didn't know you'd made.</li>
+    <li><strong>Have them log in to the Tier 1 accounts while you're there.</strong> This is the step that catches the broken thing. Access that's never been tested by the new person is access you're guessing about.</li>
+    <li><strong>Transfer ownership, not just access.</strong> Owner of record, billing contact, recovery addresses, domain registrant. Access without ownership leaves them dependent on you.</li>
+    <li><strong>Rotate shared credentials</strong> after you leave — and make sure someone owns that task.</li>
+    <li><strong>Remove your own access</strong> and confirm it in writing.</li>
+    <li><strong>Agree a grace period</strong> — a few weeks where they can ask questions. Cheap for you, and it's what turns a clean handover into a good reference.</li>
+  </ol>
+
+  <h2>Start with fifteen minutes</h2>
+
+  <p>Don't plan a documentation project. Open a spreadsheet and fill in the Tier 1 accounts — usually five to eight rows. Add the recovery map. Note the two or three known problems you already know about.</p>
+
+  <p>That's fifteen minutes, and it covers the accounts that actually matter. Add rows as you touch other services, and in a couple of months it's complete without a single dedicated session. The version that exists and is 70% complete beats the thorough one you were going to write next quarter.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="quarterly-access-review.html">A quarterly access review you can finish in an hour</a></li>
+      <li><a href="new-client-access-checklist.html">Setting up a new client or project: an access checklist</a></li>
+      <li><a href="credential-backup-and-break-glass.html">When your password manager isn't available</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

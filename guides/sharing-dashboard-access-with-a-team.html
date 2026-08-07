@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sharing dashboard access with a team without sharing passwords — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Shared logins break attribution, rotation, and offboarding. Here is the ladder of better options — native roles, SSO, shared vault items — and what to do when a vendor only sells you one seat.">
+<meta name="keywords" content="share dashboard access, stop sharing passwords, team credential sharing, offboarding checklist, shared login risks">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/sharing-dashboard-access-with-a-team.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/sharing-dashboard-access-with-a-team.html">
+<meta property="og:title" content="Sharing dashboard access with a team without sharing passwords">
+<meta property="og:description" content="Shared logins break attribution, rotation, and offboarding. Here is the ladder of better options — native roles, SSO, shared vault items — and what to do when a vendor only sells you one seat.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Sharing access</div>
+
+  <h1>Sharing dashboard access with a team without sharing passwords</h1>
+  <p class="meta">Practical guides &middot; About 7 minutes</p>
+
+  <p class="lede">Somewhere in most small teams there is a password that four people know, that nobody remembers setting, and that hasn't changed since the second person joined. It works fine right up until the day it doesn't — which is usually the day someone leaves. This guide is about climbing out of that, service by service, without pretending you have an enterprise identity budget.</p>
+
+  <h2>What actually goes wrong with a shared login</h2>
+
+  <p>"We all use the same password" fails in four specific, predictable ways. It's worth naming them, because each one points at a different fix.</p>
+
+  <p><strong>Attribution disappears.</strong> The audit log says the account changed the payout destination. It cannot tell you which of the four humans did it. Not because anyone is suspected of anything — but because "who made this change and what were they trying to do?" is a question you will genuinely need answered one day, and a shared login permanently destroys the ability to answer it.</p>
+
+  <p><strong>Rotation becomes a coordination problem.</strong> Changing a personal password takes ten seconds. Changing a shared one means notifying everyone, updating wherever it's stored, and fielding "I can't get in" messages for two days. So it doesn't get changed. The credential quietly becomes permanent.</p>
+
+  <p><strong>Offboarding becomes unfalsifiable.</strong> When someone with a personal account leaves, you disable it and you're done — you can point to the disabled account as proof. When someone who knew a shared password leaves, the only remedy is rotating it, and you have no way of demonstrating that knowledge was actually revoked. Worse, you must remember every shared credential they ever touched.</p>
+
+  <p><strong>Second factors get mangled.</strong> A shared password plus a second factor bound to one person's phone means that person becomes a bottleneck who reads codes aloud. The usual "solution" is disabling 2FA on the shared account entirely, which takes your <em>most</em> widely known credential and makes it your <em>least</em> protected one. See the <a href="two-factor-authentication-many-accounts.html">guide on organising 2FA</a> for how to handle this properly.</p>
+
+  <h2>The ladder</h2>
+
+  <p>Work down this list per service and stop at the first rung that's actually available. Most teams find that a surprising share of their shared logins were never necessary — the service supported multiple users all along and nobody checked.</p>
+
+  <h3>1. Native user management, with roles</h3>
+
+  <p>The best option, and the one most often overlooked. Invite each person as their own user and assign the narrowest role that lets them do the job. You get per-person audit trails, per-person 2FA, and one-click revocation.</p>
+
+  <p>Two habits make this work. First, actually read the role definitions instead of defaulting to Admin — many products have a perfectly good "Analyst", "Billing", or "Support" role that covers the real need. Second, check whether extra seats cost anything before assuming they do; plenty of tools include unlimited read-only or limited-role users, and even where seats cost money, a seat is usually cheaper than an incident.</p>
+
+  <h3>2. Delegated or linked access</h3>
+
+  <p>Advertising, analytics, and merchant platforms frequently have a purpose-built model where an agency or partner account is granted access to a client's account without either side sharing credentials. Access is granted, scoped, and revoked from the client's side. If you manage dashboards on behalf of clients, this is the rung to look for — it's designed for exactly your situation and it means a client relationship ending doesn't require a password change.</p>
+
+  <h3>3. Single sign-on</h3>
+
+  <p>If you already have a central identity provider, SSO makes all of this someone else's problem: disable the person centrally and their access everywhere disappears. Two caveats worth knowing before you plan around it. SSO is often gated behind a higher pricing tier, sometimes steeply. And SSO rarely covers <em>everything</em> — there is almost always a registrar, a niche vendor, or a legacy tool sitting outside it, and those exceptions are exactly the accounts that need the most attention.</p>
+
+  <h3>4. A shared vault item — deliberately, not by default</h3>
+
+  <p>Sometimes the vendor genuinely sells one login and offers nothing else. This is the legitimate use for a shared credential, and it's fine <em>if you treat it as a known exception rather than the default</em>:</p>
+
+  <ul>
+    <li>Put it in a dedicated shared collection in a password manager, not in the personal vault of whoever set it up.</li>
+    <li>Grant access to the smallest possible group, and review that group on a schedule you actually keep.</li>
+    <li>Store the second factor with the credential, so the login doesn't depend on one person's phone.</li>
+    <li>Write down, next to the entry, why it's shared. "Vendor sells one seat only" tells the next person this was a decision, not an accident — and tells them to re-check at renewal.</li>
+    <li>Rotate on departure. Every time. This is the part that gets skipped.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-title">The line that matters</div>
+    <p>A shared credential in a controlled vault with a documented reason is a managed risk. The same credential in a chat message is an unmanaged one. The difference isn't the password — it's whether anyone can answer "who has this, and why?"</p>
+  </div>
+
+  <h3>Below the ladder: places credentials must not live</h3>
+
+  <p>Chat messages and email persist far longer than the conversation. They get backed up, exported, synced to personal devices, and surfaced by search years later — and if the chat workspace itself is ever compromised, an attacker gets a searchable index of your credentials. Shared spreadsheets and docs have the same problem plus link-sharing settings that drift over time. Sticky notes and local text files are obvious enough not to belong on a list, and yet.</p>
+
+  <p>If credentials are currently in any of these places, moving them is only half the job — go back and delete the originals, including from sent folders and message history.</p>
+
+  <h2>The offboarding checklist</h2>
+
+  <p>This is where the inventory from the <a href="managing-many-admin-dashboards.html">multi-dashboard guide</a> pays for itself. When someone leaves, you want a list, not a memory exercise. In rough priority order:</p>
+
+  <ol>
+    <li><strong>Central identity first.</strong> Suspend the SSO or directory account. This closes the largest number of doors with one action.</li>
+    <li><strong>Personal accounts on each service.</strong> Remove or disable, don't just downgrade the role.</li>
+    <li><strong>Rotate every shared credential they had access to.</strong> Your vault should be able to tell you which ones those were.</li>
+    <li><strong>Revoke long-lived tokens.</strong> API keys, personal access tokens, app passwords, and OAuth grants they created often survive the account being disabled. This is the most commonly missed step by a wide margin.</li>
+    <li><strong>Check recovery paths.</strong> If their address or phone number is a recovery contact on any account, replace it — otherwise you've left a live key in the lock.</li>
+    <li><strong>Reassign ownership.</strong> Anything solely owned by them — a domain, a billing contact, a scheduled report, a repository — needs a new owner before the account is fully closed.</li>
+  </ol>
+
+  <p>Write this list once, keep it with the inventory, and run it as a checklist rather than from memory. Departures are exactly the moment when everyone is busy and something gets forgotten.</p>
+
+  <h2>Contractors and short-term access</h2>
+
+  <p>Temporary access has a habit of becoming permanent because nothing forces a review. Three things prevent that. Set an end date at the moment you grant access, and put it somewhere that will actually surface — a calendar entry beats good intentions. Prefer the narrowest role that works, and resist "just give them admin, it's easier for now". And where the platform supports genuinely time-boxed or guest access that expires on its own, use it, because access that expires by default is worth more than access you have to remember to remove.</p>
+
+  <h2>Rotation without the theatre</h2>
+
+  <p>Rotating every password on a calendar schedule is mostly wasted effort — it encourages weak, incrementing passwords and burns goodwill you'll want later. Rotate on <em>events</em> instead:</p>
+
+  <ul>
+    <li>Someone with access leaves, or their role changes.</li>
+    <li>A credential appeared somewhere it shouldn't have — a chat, a ticket, a screen share, a support thread.</li>
+    <li>A service discloses a breach, or a credential shows up in a breach-monitoring alert.</li>
+    <li>A device holding credentials was lost, sold, or handed on.</li>
+    <li>You've just migrated a shared login off a sticky note and into a vault — rotate on arrival, since you don't know its history.</li>
+  </ul>
+
+  <p>Event-driven rotation is less work and considerably more effective, because every rotation corresponds to an actual change in who might know the secret.</p>
+
+  <h2>Where to start</h2>
+
+  <p>Take your inventory, filter to the rows where the "who else has access" column has more than one name, and sort by blast radius. Work down that list, and for each one ask the only question that matters: <em>does this service support real user accounts, and did we ever check?</em> More often than not, the answer is yes and no — and that shared login was never needed at all.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="managing-many-admin-dashboards.html">How to manage logins for 20+ admin dashboards without losing track</a></li>
+      <li><a href="two-factor-authentication-many-accounts.html">Organising two-factor authentication across dozens of accounts</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Recognising phishing aimed at admin accounts — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Attacks on people who hold admin access are targeted, well-researched, and don't look like spam. The lures that actually get used, why checking URLs isn't enough, and habits that work.">
+<meta name="keywords" content="admin account phishing, spear phishing, OAuth consent phishing, MFA fatigue, phishing resistant 2FA">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/phishing-aimed-at-admin-accounts.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/phishing-aimed-at-admin-accounts.html">
+<meta property="og:title" content="Recognising phishing aimed at admin accounts">
+<meta property="og:description" content="Attacks on people who hold admin access are targeted, well-researched, and don't look like spam. The lures that actually get used, why checking URLs isn't enough, and habits that work.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Phishing</div>
+
+  <h1>Recognising phishing aimed at admin accounts</h1>
+  <p class="meta">Practical guides &middot; About 7 minutes</p>
+
+  <p class="lede">Generic phishing is easy to spot and mostly filtered before you see it. What reaches someone holding admin credentials is different: researched, plausible, well-timed, and often free of every tell you were taught to look for. The defence isn't sharper eyes — it's a small number of habits that work even when the message is convincing.</p>
+
+  <h2>Why your inbox is a different problem</h2>
+
+  <p>Someone with admin access to a payment processor, a DNS zone, or a customer database is worth real effort. That effort shows up as attacks tailored to you specifically.</p>
+
+  <p>The research is cheap and public. Your role is on a professional network. The tools your company uses are visible in job listings, conference talks, and the badges on your own website. Your colleagues' names and the vendors you work with are discoverable. From that, a message can reference the right product, the right person, and a plausible reason — without knowing anything genuinely private.</p>
+
+  <p>Which means the classic advice — bad grammar, generic greeting, obviously wrong domain — filters out the low-effort attacks and leaves exactly the ones aimed at you.</p>
+
+  <h2>The lures that actually get used</h2>
+
+  <p><strong>Vendor security notices.</strong> "Unusual sign-in detected on your account. Review activity." It borrows the urgency of a real security alert and sends you somewhere to "verify". Effective because reviewing a genuine alert is exactly the responsible thing to do.</p>
+
+  <p><strong>Billing and payment failures.</strong> "Your card was declined; your service will be suspended in 24 hours." Aimed at whoever holds the billing role, with a deadline that discourages checking.</p>
+
+  <p><strong>Shared document notifications.</strong> A file-sharing notice from a colleague's name, leading to a fake sign-in page for your document platform. Convincing because these arrive legitimately all day.</p>
+
+  <p><strong>Support impersonation.</strong> A message or call from "the vendor's support team" about a ticket, asking you to confirm your identity — a code, a password, a screen share. Real vendors don't ask for codes; attackers count on you not being certain of that in the moment.</p>
+
+  <p><strong>OAuth consent grabs.</strong> Increasingly common and worth understanding, because it sidesteps everything else. Instead of a fake login page, you get a <em>real</em> permission prompt from your actual provider, asking you to authorise an app with an innocuous name. There's no password to steal and no fake domain to spot — you're being asked to hand over access voluntarily. If you approve, the attacker holds a token that survives password changes and 2FA. The only defence is reading what permissions are being requested and whether you asked for this.</p>
+
+  <p><strong>Multi-factor fatigue.</strong> An attacker with your password triggers push approvals repeatedly, often at night, until you tap approve to stop the noise. If you get an approval prompt you didn't initiate, someone has your password — deny it and go change the password immediately.</p>
+
+  <p><strong>Domain and registrar notices.</strong> Expiry warnings and transfer notifications, aimed at the account with the largest blast radius you own. Well-timed against publicly visible expiry dates.</p>
+
+  <div class="callout">
+    <div class="callout-title">The common structure</div>
+    <p>Nearly all of these combine a plausible reason with time pressure and a link. The pressure isn't decoration — it exists to stop you doing the one thing that defeats the attack, which is navigating to the site yourself.</p>
+  </div>
+
+  <h2>Why "check the URL" isn't enough</h2>
+
+  <p>It's still worth doing, but treat it as one signal rather than the answer. Lookalike domains use character substitutions your eye skips at a glance. Attackers register legitimate-looking subdomains on services they control, so the visible prefix reads correctly while the actual domain is elsewhere. Links get wrapped by shorteners and redirect chains that hide the destination. Mobile browsers truncate the address bar, hiding the part that matters. And the padlock means only that the connection is encrypted — attackers get certificates as easily as anyone.</p>
+
+  <p>Reading a URL correctly requires knowing to read right-to-left from the path back to the registered domain, at a moment when you're busy and the message says your service is about to be suspended. It's a check that works most of the time and fails exactly when the pressure is highest.</p>
+
+  <h2>Habits that work under pressure</h2>
+
+  <p>These are all mechanical. None require you to make a judgement call while stressed.</p>
+
+  <h3>Navigate yourself, always</h3>
+
+  <p>The single most effective habit. Never act on a link in a message about an account. Open a new tab and reach the service the way you normally do — a bookmark, your password manager, typing the address you know.</p>
+
+  <p>If the alert is real, it will be waiting for you inside the account. If nothing's there, you've learned what you needed to. This defeats every fake-login-page attack regardless of how convincing the message was, and it costs about eight seconds.</p>
+
+  <h3>Let your password manager decide</h3>
+
+  <p>A manager that matches on origin will not offer to fill credentials on a lookalike domain. It can't be fooled by visual similarity because it isn't looking at the rendering.</p>
+
+  <p>The habit that makes this useful: <strong>treat a failure to autofill as a warning, not an inconvenience.</strong> If your manager doesn't recognise the site you think you're on, the overwhelmingly likely explanation is that you're not on it. Don't copy and paste around the problem — that's manually defeating a control that just fired correctly. This is covered further in the <a href="choosing-where-credentials-live.html">credential storage guide</a>.</p>
+
+  <h3>Use phishing-resistant factors where it counts</h3>
+
+  <p>Hardware keys and passkeys verify the site's origin before responding, so they simply won't authenticate to a lookalike. That's a categorical defence rather than a probabilistic one, and it's the reason to put them on your Tier 1 accounts specifically — see the <a href="passkeys-for-multi-account-work.html">passkeys guide</a>.</p>
+
+  <p>A code from an authenticator app does not provide this. It's a real improvement over a password alone, but it can be relayed by a fake page in real time.</p>
+
+  <h3>Verify out of band</h3>
+
+  <p>For anything involving money, credentials, or access changes, confirm through a channel you established independently — a phone number you already had, a colleague in person, a support portal you logged into yourself. Never the contact details in the message.</p>
+
+  <p>This applies especially to requests that appear to come from colleagues. A message from a manager's name asking you to grant access urgently is a standard pattern, and a thirty-second check is cheap.</p>
+
+  <h3>Treat unexpected prompts as evidence</h3>
+
+  <p>An approval request you didn't trigger means someone is actively using your password right now. It is not a glitch. Deny it, change that password, and check the account's active sessions and tokens.</p>
+
+  <h2>Reduce what a successful attack gets</h2>
+
+  <p>Assume one lands eventually. Everything from the other guides here is what limits the damage: unique passwords so one compromise stays contained; <a href="managing-many-admin-dashboards.html">tiering</a> so the most-attacked accounts have the strongest factors; narrow roles so a compromised account can't do everything; and <a href="quarterly-access-review.html">regular reviews</a> so an attacker's leftovers — a new token, a forwarding rule, an added user — get found.</p>
+
+  <p>That last point matters. Attackers who get in usually establish a second way back before doing anything visible. Changing the password afterwards doesn't remove it.</p>
+
+  <h2>If you think you fell for one</h2>
+
+  <p>Speed beats certainty. Act first, investigate after.</p>
+
+  <ol>
+    <li><strong>Change the password</strong> on the affected account, from a device you trust.</li>
+    <li><strong>End all sessions</strong> and revoke trusted devices — both, they're separate actions. See the <a href="session-lifetimes-and-cookies.html">sessions guide</a>.</li>
+    <li><strong>Check connected apps and tokens</strong> and revoke anything you don't recognise. This is where persistence hides, and it's the step people skip.</li>
+    <li><strong>Check recovery settings</strong> — email addresses, phone numbers, backup codes. An attacker who changed these keeps a way in.</li>
+    <li><strong>Check mail rules</strong> if it was an email account. Forwarding and auto-delete rules are used to intercept reset messages and hide the evidence.</li>
+    <li><strong>Change the password anywhere you reused it.</strong> Ideally nowhere.</li>
+    <li><strong>Tell someone.</strong> Colleagues, the vendor, whoever needs to know. The instinct to handle it quietly is the thing that turns a contained incident into a bad one — and people who report immediately are the reason most attempted breaches stay small.</li>
+  </ol>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="passkeys-for-multi-account-work.html">Passkeys, for people who manage a lot of accounts</a></li>
+      <li><a href="two-factor-authentication-many-accounts.html">Organising two-factor authentication across dozens of accounts</a></li>
+      <li><a href="api-keys-and-long-lived-tokens.html">API keys and tokens: the credentials you forget you issued</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

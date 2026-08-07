@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Browser profiles and multi-account workflows — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Running several identities on the same service without logging out all day: profiles, container tabs, and how to stop posting to the wrong account.">
+<meta name="keywords" content="browser profiles, container tabs, multiple accounts same site, multi account workflow, separate browser identities">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/browser-profiles-and-multi-account-workflows.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/browser-profiles-and-multi-account-workflows.html">
+<meta property="og:title" content="Browser profiles and multi-account workflows">
+<meta property="og:description" content="Running several identities on the same service without logging out all day: profiles, container tabs, and how to stop posting to the wrong account.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Browser profiles</div>
+
+  <h1>Browser profiles and multi-account workflows</h1>
+  <p class="meta">Practical guides &middot; About 6 minutes</p>
+
+  <p class="lede">If you manage the same service for several clients, you've hit the wall: one login at a time, constant signing out and back in, and the low-level dread of having published something to the wrong account. The fix isn't a better memory. It's making the browser hold several identities at once.</p>
+
+  <h2>Why one browser holds one login</h2>
+
+  <p>A site knows who you are from a cookie scoped to its domain. One cookie jar means one identity per site — so signing into a second account overwrites the first.</p>
+
+  <p>Which points straight at the solution: <strong>give each identity its own cookie jar.</strong> Every technique below is a different way of doing that, trading isolation against convenience.</p>
+
+  <h2>The options</h2>
+
+  <h3>Browser profiles</h3>
+
+  <p>A full separate browser instance — its own cookies, storage, history, extensions, bookmarks, and saved passwords — in its own window.</p>
+
+  <p><strong>Good:</strong> complete separation, available in every major browser, no add-ons needed. Each profile gets its own window, so you can label and position them. Extensions are per-profile, which means a client's required extension doesn't run everywhere else.</p>
+
+  <p><strong>Less good:</strong> heavier on memory. Switching means changing windows. Ten clients means ten profiles, which becomes its own management problem.</p>
+
+  <p><strong>Best for:</strong> a handful of long-running contexts — per client, or personal versus work.</p>
+
+  <h3>Container tabs</h3>
+
+  <p>Available in Firefox and by extension elsewhere: separate cookie jars <em>within one window</em>, with each tab colour-coded to its container.</p>
+
+  <p><strong>Good:</strong> lighter than profiles and much faster to switch — different identities live side by side as tabs. The colour coding is genuinely valuable: the identity is visible before you click anything. Rules can pin a domain to always open in a specific container.</p>
+
+  <p><strong>Less good:</strong> weaker separation than profiles (shared history, extensions, saved passwords), and browser-specific.</p>
+
+  <p><strong>Best for:</strong> many identities on the same handful of services, where switching is frequent.</p>
+
+  <h3>Multi-account support inside the service</h3>
+
+  <p>Some platforms let one identity hold several accounts and switch between them natively — the account switcher in the corner.</p>
+
+  <p><strong>Good:</strong> no browser gymnastics at all, and it's the vendor's supported path.</p>
+
+  <p><strong>Less good:</strong> only exists where the vendor built it, and the switcher itself becomes the risk — one wrong click and you're acting as a different account with no visual difference beyond a small avatar. Where the platform supports proper delegated access instead, prefer that; see the <a href="new-client-access-checklist.html">client onboarding guide</a>.</p>
+
+  <h3>Private windows</h3>
+
+  <p>Fine for a quick one-off second login. Everything is discarded on close, so it's not a workflow — but it saves setting up a profile for a five-minute task.</p>
+
+  <h3>Separate browsers</h3>
+
+  <p>Using different browser applications for different contexts. Crude but effective, and the strongest separation short of separate machines. Worth reserving for one specific case: keeping your highest-consequence accounts in a browser you use for nothing else. See below.</p>
+
+  <div class="callout">
+    <div class="callout-title">A reasonable default</div>
+    <p>Container tabs for day-to-day client switching, profiles where you need real isolation or different extensions, and one separate browser holding only Tier 1 accounts — registrar, DNS, cloud root. That last one costs nothing and meaningfully reduces what a compromised everyday browsing session can reach.</p>
+  </div>
+
+  <h2>Make the identity visible</h2>
+
+  <p>Isolation stops accounts leaking into each other. It does <em>not</em> stop you acting in the wrong one — for that you need to be able to tell them apart without thinking. Every mechanism here is worth the two minutes:</p>
+
+  <ul>
+    <li><strong>Colour the profile or container.</strong> Both browsers and container extensions support a colour per context. Pick distinct ones and keep them stable; the colour becomes what you actually navigate by.</li>
+    <li><strong>Name it for the client, not the service.</strong> "Northwind", not "Ads account 2".</li>
+    <li><strong>Give each profile a distinct avatar or theme</strong> so the window is identifiable from the taskbar.</li>
+    <li><strong>Keep window positions consistent.</strong> Client A always on the left screen. Spatial memory is faster than reading.</li>
+    <li><strong>Use per-context bookmarks</strong> so each profile only contains links relevant to it. If the bookmark isn't there, you're in the wrong window.</li>
+  </ul>
+
+  <p>The failure mode you're designing against isn't a hack. It's a Tuesday afternoon, three near-identical dashboards open, and one action taken in the wrong one. Colour and position prevent that; discipline doesn't.</p>
+
+  <h2>Which credentials go where</h2>
+
+  <p>Splitting the browser raises an obvious question: does the password manager get split too?</p>
+
+  <p>Generally no. Use one password manager account across all profiles, with per-client vault collections inside it. Splitting your vault by browser profile means several master passwords, several places to keep in sync, and a much higher chance something important lives in only one of them.</p>
+
+  <p>The exception is the Tier 1 browser. If you keep a separate browser for your highest-consequence accounts, it's reasonable for those credentials to be reachable only there — that's the isolation you were buying. Just make sure the recovery material is filed somewhere independent, per the <a href="credential-backup-and-break-glass.html">break-glass guide</a>.</p>
+
+  <p>Either way, disable the browser's own built-in password saving where you use a dedicated manager. Two vaults holding different subsets of your passwords is how entries drift out of date and how you end up unsure which copy is current.</p>
+
+  <h2>Sessions still expire independently</h2>
+
+  <p>Profiles don't change how long a site keeps you signed in — they multiply the number of independent sessions you're tracking. Three profiles against the same service means three sessions expiring on their own schedules, so you'll be logged out of one context and not another, which is confusing until you know to expect it.</p>
+
+  <p>Two things help. Note in your <a href="managing-many-admin-dashboards.html">inventory</a> which profile each account belongs to, so "where am I signed into this?" has an answer. And accept that batching logins per context beats trying to keep everything alive — the <a href="session-lifetimes-and-cookies.html">sessions guide</a> explains why that's the winning approach.</p>
+
+  <h2>Where this approach runs out</h2>
+
+  <p>Worth being clear about the limits, because profiles get oversold as a security control.</p>
+
+  <p><strong>They aren't a security boundary.</strong> All profiles run as the same operating system user with access to the same files. Malware on your machine reaches all of them. Profiles prevent <em>sites</em> from seeing each other's cookies; they don't defend against a compromised device.</p>
+
+  <p><strong>They don't hide you from tracking.</strong> Cookies are separated, but browser fingerprinting and your IP address are not. If your goal is to prevent a service correlating two of your accounts, profiles alone won't do it.</p>
+
+  <p><strong>They don't scale forever.</strong> Past roughly a dozen contexts, the profile switcher itself becomes the bottleneck. At that point container tabs, native account switchers, or a tool that manages the login sequence for you is a better answer than more windows.</p>
+
+  <p><strong>Shared machines need real OS accounts.</strong> If someone else uses the device, a separate operating system user is the actual boundary. A browser profile is a convenience feature and won't stop anyone who wants to look.</p>
+
+  <h2>Setting it up</h2>
+
+  <ol>
+    <li>List your recurring contexts — usually clients, plus personal and work.</li>
+    <li>Pick a mechanism: containers for many quick switches, profiles for fewer contexts needing real separation.</li>
+    <li>Create one per context, named for the client and given a distinct colour.</li>
+    <li>Sign into each context's accounts once, in the right window.</li>
+    <li>Add per-context bookmarks. Remove the ones that don't belong.</li>
+    <li>Set a separate browser aside for Tier 1 and use it for nothing else.</li>
+    <li>Record the profile in your inventory alongside each account.</li>
+  </ol>
+
+  <p>An hour to set up, and it removes a daily irritation permanently — along with the category of mistake that's genuinely embarrassing to explain to a client.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="session-lifetimes-and-cookies.html">Why you're always logged out of the wrong thing</a></li>
+      <li><a href="new-client-access-checklist.html">Setting up a new client or project: an access checklist</a></li>
+      <li><a href="managing-many-admin-dashboards.html">How to manage logins for 20+ admin dashboards without losing track</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>

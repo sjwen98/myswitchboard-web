@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Passkeys, for people who manage a lot of accounts — mySwitchBoard Guides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="What a passkey actually is, why it resists phishing when passwords and codes don't, the difference between synced and device-bound keys, and where passkeys still fall short for multi-account work.">
+<meta name="keywords" content="passkeys explained, synced vs device-bound passkey, phishing resistant authentication, WebAuthn, passkey migration">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://myswitchboard.vercel.app/guides/passkeys-for-multi-account-work.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="mySwitchBoard">
+<meta property="og:url" content="https://myswitchboard.vercel.app/guides/passkeys-for-multi-account-work.html">
+<meta property="og:title" content="Passkeys, for people who manage a lot of accounts">
+<meta property="og:description" content="What a passkey actually is, why it resists phishing when passwords and codes don't, the difference between synced and device-bound keys, and where passkeys still fall short for multi-account work.">
+<meta property="og:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myswitchboard.vercel.app/assets/og_cover.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_32.png">
+<link rel="apple-touch-icon" href="../assets/app_icon_180.png">
+<link rel="stylesheet" href="../assets/site.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4551036589300765"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="patch-panel"></div>
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="../index.html">
+        <img src="../assets/app_icon_180.png" alt="">
+        mySwitchBoard
+      </a>
+      <div class="nav-links">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#how-it-works">How it works</a>
+        <a href="index.html">Guides</a>
+        <a href="../faq.html">FAQ</a>
+        <a href="../privacy.html">Privacy</a>
+        <a href="../terms.html">Terms</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap article">
+  <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; <a href="index.html">Guides</a> &rsaquo; Passkeys</div>
+
+  <h1>Passkeys, for people who manage a lot of accounts</h1>
+  <p class="meta">Practical guides &middot; About 8 minutes</p>
+
+  <p class="lede">Passkeys are the first genuinely new thing in consumer authentication in a long while, and the marketing around them ("just use your face!") hides the part that actually matters. If you manage many accounts, it's worth understanding the mechanism — because it tells you exactly which accounts to move first and which to leave alone for now.</p>
+
+  <h2>What a passkey is</h2>
+
+  <p>A passkey is a public-private key pair created for one specific website. The private key stays on your device or in your vault and never leaves it. The public key goes to the site.</p>
+
+  <p>Logging in works as a challenge and response. The site sends a random challenge; your device signs it with the private key, after checking that you're present — a fingerprint, a face scan, a PIN, a tap on a hardware key. The site verifies the signature against the public key it already holds.</p>
+
+  <p>Three consequences follow, and they're the whole point:</p>
+
+  <ul>
+    <li><strong>Nothing reusable is transmitted.</strong> The signature is valid for that one challenge. Intercepting it gains an attacker nothing.</li>
+    <li><strong>Nothing reusable is stored by the site.</strong> A breach of the service leaks public keys, which are public by design. There is no password database to crack.</li>
+    <li><strong>There is nothing for you to type.</strong> So there is nothing you can be tricked into typing somewhere else.</li>
+  </ul>
+
+  <h2>Why this beats a code from an app</h2>
+
+  <p>This is the part worth internalising, because it's the reason passkeys matter more than "one less password to remember".</p>
+
+  <p>A six-digit code from an authenticator app is a real improvement over a password alone — but it's still a secret you read off one screen and type into another, and you are the one deciding whether the destination is legitimate. A convincing fake login page asks for the code, you type it, and a script relays it to the real site within its validity window. Your second factor just walked through the front door with the attacker.</p>
+
+  <p>A passkey can't be relayed this way, because the browser binds the signature to the site's actual origin. Ask a passkey to authenticate to a lookalike domain and it simply won't produce a signature — not because it detected fraud, but because the lookalike isn't the site the key was created for. The check happens in software, before any human judgement is involved.</p>
+
+  <div class="callout">
+    <div class="callout-title">The practical upshot</div>
+    <p>Passkeys and hardware security keys are the only widely available factors that defend against real-time phishing. That's a categorical difference from passwords, SMS, and TOTP codes — not an incremental one.</p>
+  </div>
+
+  <h2>Synced versus device-bound</h2>
+
+  <p>Passkeys come in two flavours, and the distinction drives every practical decision you'll make about them.</p>
+
+  <p><strong>Synced passkeys</strong> live in a credential manager — a platform account or a password manager — and replicate across your devices. Lose a phone, and the passkeys are still there on the laptop. This is the ergonomic option and the one most people should use for most accounts.</p>
+
+  <p><strong>Device-bound passkeys</strong> never leave the hardware they were created on, typically a physical security key. There is no copy anywhere. Lose it without a backup registered, and that credential is gone.</p>
+
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr><th></th><th>Synced</th><th>Device-bound</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Survives losing one device</td><td>Yes</td><td>Only if you registered a second key</td></tr>
+      <tr><td>Weakest link</td><td>The sync account and its recovery flow</td><td>Physical possession</td></tr>
+      <tr><td>Works on a borrowed machine</td><td>Usually, via the vault</td><td>Yes — plug it in</td></tr>
+      <tr><td>Best for</td><td>Tier 2 and Tier 3 accounts</td><td>Tier 1 accounts</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p>The trap with synced passkeys is easy to miss: your passkeys are now only as strong as the account they sync through. If that platform or vault account can be recovered by someone who controls your email and answers a few questions, then every passkey inside it inherits that weakness. Secure the sync account first, with its own strong factor, before you move anything important into it.</p>
+
+  <h2>Where passkeys still fall short</h2>
+
+  <p>Worth knowing before you plan a migration, because these are the things that will bite you:</p>
+
+  <p><strong>Coverage is uneven.</strong> Large consumer platforms support passkeys well. The niche B2B dashboard, the legacy registrar, the regional payment provider — often not. You will be running a mixed setup for years, so plan for both rather than a clean cutover.</p>
+
+  <p><strong>Passkeys are often added <em>beside</em> the password, not instead of it.</strong> Many services let you register a passkey while leaving password login fully enabled. That's convenient and it also means the phishable path is still open — an attacker simply chooses it. Where a service offers to disable password sign-in after passkey enrolment, that's the setting that converts a convenience feature into a security one. Where it doesn't, understand that you've gained ergonomics, not protection.</p>
+
+  <p><strong>Recovery flows can undercut everything.</strong> If losing your passkey drops you into "we'll email you a reset link", the account's real security is your email account's security. This is not a passkey problem so much as a reminder that the recovery path is part of the threat model — see the <a href="two-factor-authentication-many-accounts.html">2FA guide</a> for how to audit it.</p>
+
+  <p><strong>Shared accounts are awkward.</strong> Passkeys are built around individual identity, which is correct but unhelpful when a vendor sells one seat. Some password managers support sharing a passkey within a team vault; where they don't, you're back to a shared password. The <a href="when-a-dashboard-has-no-user-management.html">single-seat guide</a> covers the options.</p>
+
+  <p><strong>Automation doesn't get along with them.</strong> A passkey requires a user-presence gesture by design — that's what makes it phishing-resistant. Anything doing unattended, scripted login will not be able to use one. If a workflow depends on automated sign-in, that account stays on a password, and you compensate elsewhere: narrow permissions, IP restrictions, monitoring.</p>
+
+  <h2>A migration order that makes sense</h2>
+
+  <p>Don't try to convert everything. Work in the order where each step buys the most protection:</p>
+
+  <ol>
+    <li><strong>The sync account itself</strong> — your platform account or password manager. Everything else will depend on it, so it gets a hardware key and a verified recovery path first.</li>
+    <li><strong>Tier 1</strong> — registrar, DNS, primary email, cloud root, code hosting. Use device-bound keys here, and <strong>register two</strong>, stored in different places. Then disable password login if the service allows it.</li>
+    <li><strong>Tier 2</strong> — payment, billing, CRM. Synced passkeys are fine. Keep a TOTP factor registered as a fallback until you trust the setup.</li>
+    <li><strong>Tier 3</strong> — everything else, opportunistically. Enrol a passkey when a service offers one; don't make a project of it.</li>
+  </ol>
+
+  <p>At each step, record in your <a href="managing-many-admin-dashboards.html">inventory</a> which accounts now use a passkey and where that passkey lives. An account whose passkey location is undocumented is a lockout with a delay on it — the same failure mode as an untracked TOTP seed.</p>
+
+  <h2>Before you enrol anything</h2>
+
+  <p>Two checks that take a minute each and prevent the two most common regrets:</p>
+
+  <p>First, confirm you have a second way in. Register the passkey, then <em>immediately</em> verify that a backup key, a TOTP factor, or a set of backup codes still works. Do not remove the old method until you've tested the new one — from a different device if you can. Enrolling a passkey and deleting the password in the same sitting is how people lock themselves out.</p>
+
+  <p>Second, find out what happens on the service's account-recovery page. If it's a self-serve email reset, your passkey is a convenience improvement rather than a security boundary, and you should protect that mailbox accordingly.</p>
+
+  <h2>Is it worth it?</h2>
+
+  <p>For your Tier 1 accounts, yes, clearly — that's where phishing resistance is worth the setup effort, and where the small number of accounts makes registering two hardware keys practical.</p>
+
+  <p>For everything else, treat passkeys as a welcome ergonomic upgrade you adopt when offered. Don't force a migration, don't disable working 2FA to chase them, and don't let the project distract from the higher-value work: eliminating reused passwords, and knowing where every second factor actually lives.</p>
+
+  <div class="article-foot">
+    <h2>Related guides</h2>
+    <ul>
+      <li><a href="two-factor-authentication-many-accounts.html">Organising two-factor authentication across dozens of accounts</a></li>
+      <li><a href="phishing-aimed-at-admin-accounts.html">Recognising phishing aimed at admin accounts</a></li>
+      <li><a href="choosing-where-credentials-live.html">Choosing where your credentials live</a></li>
+      <li><a href="index.html">All guides</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>© 2026 mySwitchBoard. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="index.html">Guides</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../privacy.html">Privacy Policy</a>
+      <a href="../terms.html">Terms of Service</a>
+      <a href="#" class="mail-link" data-user="myswitchboard.myclass" data-domain="zohomail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/contact.js" defer></script>
+</body>
+</html>
